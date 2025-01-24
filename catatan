@@ -1,0 +1,8 @@
+Clone repositori.
+Jalankan composer install untuk menginstal dependensi PHP.
+Jalankan npm install atau yarn install untuk menginstal dependensi JavaScript.
+Salin .env.example menjadi .env dan sesuaikan konfigurasi.
+Jalankan php artisan key:generate untuk menghasilkan key aplikasi.
+Jalankan php artisan migrate jika ada migrasi database.
+Jalankan php artisan storage:link jika menggunakan penyimpanan file.
+Jalankan server dengan php artisan serve.
