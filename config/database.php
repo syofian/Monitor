@@ -64,9 +64,9 @@ return [
         ],
         'mongodb' => [
             'driver'   => 'mongodb',
-            'host'     => env('DB_HOST', '127.0.0.1'),
+            'host'     => env('DB_HOST', 'localhost'),
             'port'     => env('DB_PORT', 27017),
-            'database' => env('DB_DATABASE','Monitor'),
+            'database' => env('DB_DATABASE','karvelo'),
             'username' => env('DB_USERNAME', ''),
             'password' => env('DB_PASSWORD', ''),
             'options'  => [

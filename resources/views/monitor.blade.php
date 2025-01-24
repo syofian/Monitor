@@ -1,75 +1,115 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitor</title>
-    <!-- Link ke file CSS DataTables -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
-    <style>
-        /* Menambahkan border ke seluruh tabel dan sel */
-        table {
-           
-            margin: 20px auto;
-            border-collapse: collapse; /* Menggabungkan batas sel */
-        }
+@include('template/head')
 
-        th, td {
-            border: 2px solid #ddd;  /* Menambahkan border ke setiap sel */
-            padding: 8px;
-            text-align: left;
-        }
+<style type="text/css">
+    .card {
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+    }
 
-        th {
-            background-color: #f2f2f2;
-        }
+    .card-header {
+        padding: 10px;
+        background-color: #f0f0f0;
+        border-bottom: 1px solid #ccc;
+    }
 
-        table thead {
-            background-color: #f4f4f4;
-        }
-    </style>
-</head>
-<body>
-<h1 style="text-align: center;">Status Monitor</h1>
-<div style="display: flex; justify-content: flex-end; align-items: center; padding: 20px;">
-        <form action="{{ route('monitor') }}" method="GET" style="display: inline-flex; align-items: center; width: 400px;">
-            <input type="text" name="nama" id="nama" placeholder="Input Nama" style="padding: 5px; margin-right: 10px; width: 300px;">
-            <button type="submit" style="padding: 5px 10px; cursor: pointer; width: 80px;">Cari</button>
-        </form>
+    .card-body {
+        flex-grow: 1;
+        overflow: auto;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th,
+    .table td {
+        border: 1px solid #ccc;
+        padding: 8px;
+    }
+
+    /* Styling the form */
+    .search-form input[type="text"] {
+        padding: 5px;
+        margin-right: 10px;
+        width: 300px;
+    }
+
+    .search-form button {
+        padding: 5px 10px;
+        width: 80px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="card card-primary">
+    <div class="card-header">
+        <span>Monitor</span>
     </div>
-    <div style="">
-    <table id="myTable" class="display" >
-        <thead>
-            <tr>
-                <th>Nama</th>
-                <th>Barang</th>
-              
-            </tr>
-        </thead>
-        <tbody>
-        @foreach($test as $item)
-                <tr>
-                <td>{{  $item['nama']}}</td> 
-                <td>{{  $item['barang'] }}</td> 
-                   
-                    
-                </tr>
-            @endforeach
-          
-        </tbody>
-    </table>
+    
+    <div class="card-body">
+        <div id="Mandarin" class="tabcontent">
+            <div>
+                <form action="{{ route('monitor') }}" method="GET" style="display: inline-flex; align-items: center; width: 400px;" class="search-form">
+                    <input type="text" name="ProductCode" id="ProductCode" placeholder="Input Product Code" value="{{ request('ProductCode') }}">
+                    <input type="date" name="date1">
+                    <input type="date" name="date2">
+
+                    <button type="submit">Cari</button>
+                </form>
+                <br><br>
+            </div>
+
+         
+                <table id="tableMandarin" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>No</th>  
+                            <th>Product Code</th>       
+                            <th>Jumlah Transaksi</th>         
+                            <th>Cashback</th>    
+                            <th>Aksi</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($data as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item['_id'] }}</td>
+                                <td>{{ $item['total_count'] }}</td>
+                                <td>{{ $item['total_cashback'] }}</td>
+                                <td>
+                                  <a href="/cekmonitor.{{ $item['_id'] }}" class="btn-cekmonitor">
+                                    Detail
+                                </a>
+                                 
+                              </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+           
+        </div>
+    </div>
 </div>
-    <!-- Link ke file JS DataTables dan jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            $('#myTable').DataTable({
-                "searching": false  
-            });
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#tableMandarin').DataTable({
+            paging: true, // Aktifkan paging (paginasi)
+            searching: true, // Menonaktifkan fitur pencarian
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], // Opsi jumlah baris
+            order: [[0, 'asc']], // Urutkan berdasarkan kolom pertama secara ascending
+            info: true, // Menampilkan informasi jumlah data
+            language: {
+                emptyTable: "Tidak ada data yang tersedia"
+            }
         });
-    </script>
+    });
+</script>
 
-</body>
-</html>
+@include('template/foot')

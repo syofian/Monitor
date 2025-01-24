@@ -20,4 +20,4 @@ Route::get('/', function () {
 });
 
 Route::get('/monitor', [Monitor::class, 'index'])->name('monitor');
-Route::get('/cekmonitor', [Monitor::class, 'show'])->name('cek');
+Route::get('/cekmonitor.{id}', [Monitor::class, 'show'])->name('cek');
