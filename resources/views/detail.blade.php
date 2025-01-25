@@ -69,10 +69,10 @@
                     <thead>
                         <tr>
                             <th>No</th>  
-                            <th>Product Code</th>       
-                            {{-- <th>Jumlah Transaksi</th>         
+                            <th>Product Code</th>  
+                            <th>Reseller Code</th>              
                             <th>Cashback</th>    
-                            <th>Aksi</th>  --}}
+                          
                         </tr>
                     </thead>
                     <tbody>
@@ -80,6 +80,8 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item['ProductCode'] }}</td>
+                                <td>{{ $item['ResellerCode'] }}</td>
+                                <td>{{ $item['Cashback'] }}</td>
                                
                                  
                               </td>
