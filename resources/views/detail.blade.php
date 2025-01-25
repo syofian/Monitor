@@ -52,14 +52,14 @@
     
     <div class="card-body">
         <div id="Mandarin" class="tabcontent">
-            <div class="d-flex justify-content-center">
+            <!-- <div class="d-flex justify-content-center">
                 <form action="{{ route('monitor') }}" method="GET" class="d-flex gap-3 align-items-center" style="width: 400px;">
-                    <!-- Input Tanggal -->
+                
                     <input type="date" name="tgl1" value="{{ request('tgl1') }}" class="form-control">
                     <input type="date" name="tgl2" value="{{ request('tgl2') }}" class="form-control">
                     <button type="submit" class="btn btn-primary">Cari</button>
                 </form>
-            </div>
+            </div> -->
             
             
             
@@ -71,7 +71,8 @@
                             <th>No</th>  
                             <th>Product Code</th>  
                             <th>Reseller Code</th>              
-                            <th>Cashback</th>    
+                            <th>Cashback</th>
+                            <th>Tanggal Transaksi</th>    
                           
                         </tr>
                     </thead>
@@ -82,9 +83,12 @@
                                 <td>{{ $item['ProductCode'] }}</td>
                                 <td>{{ $item['ResellerCode'] }}</td>
                                 <td>{{ $item['Cashback'] }}</td>
+                                <td>{{ date('d F Y h:i A', strtotime($item['UsedAt'])) }}</td>
+
+
                                
                                  
-                              </td>
+                              
                             </tr>
                         @endforeach
                     </tbody>

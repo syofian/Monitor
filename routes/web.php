@@ -20,4 +20,7 @@ Route::get('/', function () {
 });
 
 Route::get('/voucher', [Monitor::class, 'index'])->name('monitor');
-Route::get('/voucher.{id}', [Monitor::class, 'show'])->name('cek');
+// Route::get('/voucher.{id}', [Monitor::class, 'show'])->name('cek');
+
+// Route::get('voucher/detail.{id,tgl1,tgl2}', [Monitor::class, 'show'])->name('cek');
+Route::get('voucher_detail.{id}.{tgl1}.{tgl2}', [Monitor::class, 'show'])->name('cek');
