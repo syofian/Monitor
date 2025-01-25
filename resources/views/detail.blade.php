@@ -52,13 +52,17 @@
     
     <div class="card-body">
         <div id="Mandarin" class="tabcontent">
-            <div>
-                <form action="{{ route('monitor') }}" method="GET" style="display: inline-flex; align-items: center; width: 400px;" class="search-form">
-                    <input type="text" name="ProductCode" id="ProductCode" placeholder="Input Product Code" value="{{ request('ProductCode') }}">
-                    <button type="submit">Cari</button>
+            <div class="d-flex justify-content-center">
+                <form action="{{ route('monitor') }}" method="GET" class="d-flex gap-3 align-items-center" style="width: 400px;">
+                    <!-- Input Tanggal -->
+                    <input type="date" name="tgl1" value="{{ request('tgl1') }}" class="form-control">
+                    <input type="date" name="tgl2" value="{{ request('tgl2') }}" class="form-control">
+                    <button type="submit" class="btn btn-primary">Cari</button>
                 </form>
-                <br><br>
             </div>
+            
+            
+            
 
          
                 <table id="tableMandarin" class="table table-bordered table-striped">

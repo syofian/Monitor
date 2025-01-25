@@ -19,5 +19,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/monitor', [Monitor::class, 'index'])->name('monitor');
-Route::get('/cekmonitor.{id}', [Monitor::class, 'show'])->name('cek');
+Route::get('/voucher', [Monitor::class, 'index'])->name('monitor');
+Route::get('/voucher.{id}', [Monitor::class, 'show'])->name('cek');

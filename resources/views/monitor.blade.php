@@ -52,17 +52,20 @@
     
     <div class="card-body">
         <div id="Mandarin" class="tabcontent">
-            <div>
-                <form action="{{ route('monitor') }}" method="GET" style="display: inline-flex; align-items: center; width: 400px;" class="search-form">
-                    <input type="text" name="ProductCode" id="ProductCode" placeholder="Input Product Code" value="{{ request('ProductCode') }}">
-                    <input type="date" name="date1">
-                    <input type="date" name="date2">
-
-                    <button type="submit">Cari</button>
+            <div class="d-flex justify-content-center">
+                <form action="{{ route('monitor') }}" method="GET" class="d-flex gap-3 align-items-center" style="width: 600px;">
+                    <!-- Input Product Code (Lebar disesuaikan) -->
+                    <input type="text" name="ProductCode" id="ProductCode" value="{{ request('ProductCode') }}" class="form-control" style="width: 200px;">
+                    
+                    <!-- Input Tanggal -->
+                    <input type="date" name="date1" value="{{ request('date1') }}" class="form-control">
+                    <input type="date" name="date2" value="{{ request('date2') }}" class="form-control">
+                    
+                    <!-- Tombol Submit -->
+                    <button type="submit" class="btn btn-primary">Cari</button>
                 </form>
-                <br><br>
             </div>
-
+            
          
                 <table id="tableMandarin" class="table table-bordered table-striped">
                     <thead>
@@ -82,7 +85,7 @@
                                 <td>{{ $item['total_count'] }}</td>
                                 <td>{{ $item['total_cashback'] }}</td>
                                 <td>
-                                  <a href="/cekmonitor.{{ $item['_id'] }}" class="btn-cekmonitor">
+                                  <a href="/voucher.{{ $item['_id'] }}" class="btn-cekmonitor">
                                     Detail
                                 </a>
                                  
