@@ -133,38 +133,35 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-               @if(explode('.', request()->path())[0] == "voucher" || "voucher_detail")
-
-               <li class="nav-item">
-                   <a href="{{ route('monitor') }}" class="nav-link active" style="background: #187ca4;">
-                       <i class="nav-icon fas fa-tachometer-alt"></i>
-                       <p>Voucher Usages</p>
-                   </a>
-               </li>
-               @elseif(explode('.', request()->path())[0] == "voucher" ||"voucher_detail")
-               <li class="nav-item">
-                   <a href="{{ route('monitor') }}" class="nav-link">
-                       <i class="nav-icon fas fa-tachometer-alt"></i>
-                       <p>Voucher Usages</p>
-                   </a>
-               </li>
-            @endif
-            @if(explode('.', request()->path())[0] == "Transaksi" || "Transaksi_detail")
-
-<li class="nav-item">
-    <a href="{{ route('monitor') }}" class="nav-link active" style="background: #187ca4;">
-        <i class="nav-icon fas fa-book"></i>
-        <p>Transaksi</p>
-    </a>
-</li>
-@elseif(explode('.', request()->path())[0] == "Transaksi" ||"Transaksi_detail")
-<li class="nav-item">
-    <a href="{{ route('monitor') }}" class="nav-link">
-        <i class="nav-icon fas fa-book"></i>
-        <p>Transaksi</p>
-    </a>
-</li>
+               @if(explode('.', request()->path())[0] == "voucher" || explode('.', request()->path())[0] == "voucher_detail")
+   <li class="nav-item">
+       <a href="{{ route('monitor') }}" class="nav-link active" style="background: #187ca4;">
+           <i class="nav-icon fas fa-tachometer-alt"></i>
+           <p>Voucher Usages</p>
+       </a>
+   </li>
+   <li class="nav-item">
+       <a href="{{ route('broad') }}" class="nav-link">
+           <i class="nav-icon fas fa-book"></i>
+           <p>Broad Cast</p>
+       </a>
+   </li>
+@elseif(explode('.', request()->path())[0] == "broad")
+   <li class="nav-item">
+       <a href="{{ route('monitor') }}" class="nav-link">
+           <i class="nav-icon fas fa-tachometer-alt"></i>
+           <p>Voucher Usages</p>
+       </a>
+   </li>
+   <li class="nav-item">
+       <a href="{{ route('broad') }}" class="nav-link active" style="background: #187ca4;">
+           <i class="nav-icon fas fa-book"></i>
+           <p>Broad Cast</p>
+       </a>
+   </li>
 @endif
+
+
           
         </ul>
       </nav>

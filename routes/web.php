@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Monitor; // Pastikan class controller di-import dengan benar
+use App\Http\Controllers\broad; // Pastikan class controller di-import dengan benar
 
 
 /*
@@ -24,3 +25,8 @@ Route::get('/voucher', [Monitor::class, 'index'])->name('monitor');
 
 // Route::get('voucher/detail.{id,tgl1,tgl2}', [Monitor::class, 'show'])->name('cek');
 Route::get('voucher_detail.{id}.{tgl1}.{tgl2}', [Monitor::class, 'show'])->name('cek');
+
+Route::get('/broad', [broad::class, 'index'])->name('broad');
+
+Route::post('/post-data', [broad::class, 'postData'])->name('post');  // Untuk mengirim data ke API
+
