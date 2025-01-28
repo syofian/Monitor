@@ -16,11 +16,11 @@ use App\Http\Controllers\broad; // Pastikan class controller di-import dengan be
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get('/voucher', [Monitor::class, 'index'])->name('monitor');
+Route::get('/', [Monitor::class, 'index'])->name('monitor');
 // Route::get('/voucher.{id}', [Monitor::class, 'show'])->name('cek');
 
 // Route::get('voucher/detail.{id,tgl1,tgl2}', [Monitor::class, 'show'])->name('cek');
@@ -30,3 +30,5 @@ Route::get('/broad', [broad::class, 'index'])->name('broad');
 
 Route::post('/post-data', [broad::class, 'postData'])->name('post');  // Untuk mengirim data ke API
 
+Route::post('/kirim-nama/{startDate}.{endDate}', [broad::class, 'kirimData'])->name('kirim');  // Untuk mengirim data ke API
+Route::post('/kirimself/{kode}', [broad::class, 'selfKirim'])->name('selfKirim');  // Untuk mengirim data ke API

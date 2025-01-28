@@ -31,7 +31,6 @@
         padding: 8px;
     }
 
-    /* Styling the form */
     .search-form input[type="text"] {
         padding: 5px;
         margin-right: 10px;
@@ -43,73 +42,91 @@
         width: 80px;
         cursor: pointer;
     }
+
+    #select-all {
+        cursor: pointer;
+    }
 </style>
 
 <div class="card card-primary">
     <div class="card-header">
         <span>Broad</span>
     </div>
+    <br>
+    <div class="d-flex justify-content-left ml-3">
+    <form action="{{ route('kirim', [
+    'startDate' => request()->has('date1') ? request()->input('date1') : '#', 
+    'endDate' => request()->has('date2') ? request()->input('date2') : '#'
+]) }}" method="POST">
+    @csrf <!-- Jangan lupa untuk menambahkan CSRF token -->
+    <button type="submit" class="btn btn-primary">Kirim Semua Pesan</button>
+  </form>
+  <div class="d-flex justify-content-center ml-3 gap-2">
+                <form action="{{ route('broad') }}" method="GET" class="d-flex gap-3 align-items-center" style="width: 600px;">
+                    <!-- Input Product Code (Lebar disesuaikan) -->
+                    <input type="date" name="date1"  value="{{ request('date1') }}" class="form-control" style="width: 200px;">
+                    <input type="date" name="date2"  value="{{ request('date2') }}" class="form-control" style="width: 200px;">
+
+
+                    <!-- Tombol Submit -->
+                    <button type="submit" class="btn btn-primary">Cari</button>
+                </form>
+            </div>
+</div>
 
     <div class="card-body">
         <div id="Mandarin" class="tabcontent">
-            <div class="d-flex justify-content-center">
-            <form method="POST" action="{{ url('/post-data') }}" class="d-flex gap-3 align-items-center" style="width: 600px;">
-            @csrf
-            <input type="text" name="msisdn" class="form-control" style="width: 200px;" placeholder="Input NOMOR" >
-            <input type="text" name="message" class="form-control" style="width: 200px;" placeholder="Input Pesan">
-            <button type="submit" class="form-control">Kirim Data</button>
-        </form>
-        <br>
-            </div>
-          
-         
-                <table id="tableMandarin" class="table table-bordered table-striped">
-                    <thead>
+            <!-- Table and Buttons -->
+            <table id="tableMandarin" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode</th>
+                        <th>Nama</th>
+                        <th>Alamat</th>
+                        <th>No Tlp</th>
+                        <th>Kirim Manual</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($data as $item)
                         <tr>
-                            <th>No</th> 
-                            <th>Product Code</th> 
-                            <th>Nama</th> 
-                            <th>Alamat</th>
-                            <th>No Tlp</th>      
-                           
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $item->kode }}</td>
+                            <td>{{ $item->nama }}</td>
+                            <td>{{ $item->alamat }}</td>
+                            <td>{{ $item->pengirim }}</td>
+                        <td>
+                        <form action="{{ route('selfKirim', ['kode' => $item->pengirim]) }}" method="POST">
+    @csrf <!-- This directive is necessary for CSRF protection in Laravel -->
+    <button type="submit" class="btn btn-primary">Kirim Pesan</button>
+</form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($data as $item)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->kode }}</td>
-                                <td>{{ $item->nama }}</td>
-                                <td>{{ $item->alamat }}</td>
-                                <td>{{ $item->nomor_hp }}</td>
-                              
-                               
+                    @endforeach
+                </tbody>
+            </table>
 
-
-                              </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-           
+         
         </div>
     </div>
 </div>
-
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#tableMandarin').DataTable({
-            paging: true, // Aktifkan paging (paginasi)
-            searching: true, // Menonaktifkan fitur pencarian
-            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], // Opsi jumlah baris
-            order: [[0, 'asc']], // Urutkan berdasarkan kolom pertama secara ascending
-            info: true, // Menampilkan informasi jumlah data
-            language: {
-                emptyTable: "Tidak ada data yang tersedia"
-            }
-        });
+<script>
+$(document).ready(function() {
+    // Initialize DataTable
+    var table = $('#tableMandarin').DataTable({
+        paging: true, // Enable pagination
+        searching: true, // Enable search
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], // Rows per page options
+        order: [[1, 'asc']], // Order by column 'No' (second column) ascending
+        info: true, // Show information about the number of rows
+        language: {
+            emptyTable: "Tidak ada data yang tersedia"
+        }
     });
-</script>
 
+    
+});
+
+</script>
 @include('template/foot')

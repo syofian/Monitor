@@ -133,9 +133,8 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-               @if(explode('.', request()->path())[0] == "voucher" || explode('.', request()->path())[0] == "voucher_detail")
-   <li class="nav-item">
-       <a href="{{ route('monitor') }}" class="nav-link active" style="background: #187ca4;">
+               @if(request()->path() == '/' || explode('.', request()->path())[0] == "voucher_detail")
+               <a href="{{ route('monitor') }}" class="nav-link active" style="background: #187ca4;">
            <i class="nav-icon fas fa-tachometer-alt"></i>
            <p>Voucher Usages</p>
        </a>
