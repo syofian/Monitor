@@ -7,11 +7,22 @@ use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache; 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class broad extends Controller
 {
     public function index(Request $request)
     {
+        // $content = Storage::disk('public')->get('data_dummy.csv');
+        // $rows = explode("\n", trim($content));
+
+        // foreach ($rows as $index => $row) {
+        //     $data = str_getcsv($row);
+        //     if ($index === 0) continue; // Lewati baris header
+        
+        //     echo $data[2] . "<br>"; // Index 2 = Nama
+        // }
+
         $startDate = $request->input('date1');  
         $endDate =  $request->input('date2');
         $kode =  $request->input('kode');
