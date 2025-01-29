@@ -53,6 +53,14 @@
         <span>Broad</span>
     </div>
     <br>
+
+    <div class="d-flex justify-content-left ml-3" style="gap: 10px;">
+    <button class="btn btn-success" onclick="window.location.href='/broad'">Database</button>
+    <button class="btn btn-link" onclick="window.location.href='/showfile'">CSV</button>
+</div>
+
+<br>
+
     <div class="d-flex justify-content-left ml-3">
     <form action="{{ route('kirim', [
     'startDate' => request()->has('date1') ? request()->input('date1') : '#', 

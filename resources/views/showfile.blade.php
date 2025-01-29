@@ -47,20 +47,37 @@
         cursor: pointer;
     }
 </style>
+@if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">
+        {{ session('success') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+@endif
 
 <div class="card card-primary">
     <div class="card-header">
         <span>Broad</span>
     </div>
+<br>
+    <div class="d-flex justify-content-left ml-3" style="gap: 10px;">
+    <button class="btn btn-link" onclick="window.location.href='/broad'">Database</button>
+    <button class="btn btn-success" onclick="window.location.href='/showfile'">CSV</button>
+</div>
     <br>
-    <div class="d-flex justify-content-left ml-3">
-        <form action="{{ route('kirim', [
-            'startDate' => request()->has('date1') ? request()->input('date1') : '#', 
-            'endDate' => request()->has('date2') ? request()->input('date2') : '#'
-        ]) }}" method="POST">
-            @csrf <!-- Jangan lupa untuk menambahkan CSRF token -->
+    <div class="d-flex justify-content-between m-3">
+    <form action="{{ route('fileKirim') }}" method="POST">
+            @CSRF
             <button type="submit" class="btn btn-primary">Kirim Semua Pesan</button>
         </form>
+
+    <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <input type="file" name="file" required />
+    <button type="submit" class="btn btn-primary">Ganti</button>
+    </form>
+
     </div>
 
     <div class="card-body">
@@ -73,6 +90,8 @@
                         <th>Kode</th>
                         <th>Nama</th>
                         <th>Alamat</th>
+                        <th>No HP</th>
+                        <th>Kirim Manual</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -82,7 +101,13 @@
                             <td>{{ $item['kode'] }}</td>
                             <td>{{ $item['nama'] }}</td>
                             <td>{{ $item['alamat'] }}</td>
-                           
+                            <td>{{ $item['pengirim'] }}</td>
+                            <td>
+                        <form action="{{ route('fileManual', [$item['pengirim']]) }}" method="POST">
+    @csrf <!-- This directive is necessary for CSRF protection in Laravel -->
+    <button type="submit" class="btn btn-primary">Kirim Pesan</button>
+</form>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

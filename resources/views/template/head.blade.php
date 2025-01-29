@@ -145,7 +145,7 @@
            <p>Broad Cast</p>
        </a>
    </li>
-@elseif(explode('.', request()->path())[0] == "broad")
+@elseif(explode('.', request()->path())[0] == "broad" || explode('.', request()->path())[0] == "showfile")
    <li class="nav-item">
        <a href="{{ route('monitor') }}" class="nav-link">
            <i class="nav-icon fas fa-tachometer-alt"></i>
