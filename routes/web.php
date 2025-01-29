@@ -27,6 +27,7 @@ Route::get('/', [Monitor::class, 'index'])->name('monitor');
 Route::get('voucher_detail.{id}.{tgl1}.{tgl2}', [Monitor::class, 'show'])->name('cek');
 
 Route::get('/broad', [broad::class, 'index'])->name('broad');
+Route::get('/showfile', [broad::class, 'showfile'])->name('showfile');
 
 Route::post('/post-data', [broad::class, 'postData'])->name('post');  // Untuk mengirim data ke API
 

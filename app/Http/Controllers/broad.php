@@ -13,16 +13,6 @@ class broad extends Controller
 {
     public function index(Request $request)
     {
-        // $content = Storage::disk('public')->get('data_dummy.csv');
-        // $rows = explode("\n", trim($content));
-
-        // foreach ($rows as $index => $row) {
-        //     $data = str_getcsv($row);
-        //     if ($index === 0) continue; // Lewati baris header
-        
-        //     echo $data[2] . "<br>"; // Index 2 = Nama
-        // }
-
         $startDate = $request->input('date1');  
         $endDate =  $request->input('date2');
         $kode =  $request->input('kode');
@@ -128,6 +118,49 @@ class broad extends Controller
             }
             // sleep(5);
         }
+    }
+
+    public function showfile(Request $request)
+    {
+        // Pastikan file ada sebelum membacanya
+        if (!Storage::disk('public')->exists('data_dummy.csv')) {
+            return back()->with('error', 'File tidak ditemukan.');
+        }
+    
+        // Baca isi file CSV
+        $content = Storage::disk('public')->get('data_dummy.csv');
+    
+        // Pisahkan menjadi array per baris
+        $rows = explode("\n", trim($content));
+    
+        // Ubah setiap baris menjadi array menggunakan str_getcsv
+        $data = array_map('str_getcsv', array_filter($rows));  // Mengubah rows menjadi array
+    
+        $header = array_shift($data);
+
+        // Ambil hanya kolom Nama (asumsi Nama ada di index ke-2)
+        // $data_nama = array_column($data,);
+
+        // Mengonversi array ke koleksi Laravel
+        $data_nama = collect($data)->map(function ($item) {
+            return [
+                'nama'   => $item[2],   // Ambil nama dari index ke-2
+                'kode'   => $item[1],   // Ambil kode dari index ke-1
+                'pengirim' => $item[0], // Ambil pengirim dari index ke-0
+            ];
+        });
+        
+        foreach ($data_nama as $dta) {
+         
+            $url = "http://localhost:3000/input-nama?nama=" . urlencode($dta['nama']);
+
+        }
+        
+        // Menampilkan hasil
+        dd($url); // Menampilkan array URL
+        // Kirimkan ke view
+        // return view('showfile', compact('header', 'data_nama'));
+    
     }
 
 }
