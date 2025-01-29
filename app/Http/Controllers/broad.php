@@ -45,6 +45,7 @@ class broad extends Controller
 
     public function showfile(Request $request)
     {
+
         // Pastikan file ada sebelum membacanya
         if (!Storage::disk('public')->exists('data_dummy.csv')) {
             return back()->with('error', 'File tidak ditemukan.');
@@ -75,6 +76,8 @@ class broad extends Controller
 
     public function kirimData($startDate,$endDate)
     {
+        $tempes = Storage::disk('public')->get('tempes.txt');
+
         $data = DB::connection('sqlsrv')
         ->table('reseller')
         ->select('reseller.nama', 'reseller.kode', 'reseller.alamat', 'pengirim.pengirim')
@@ -93,9 +96,9 @@ class broad extends Controller
                 'pengirim' => $item->pengirim,
             ];
         });
-        foreach ($data_nama as $nama) {
-            $url = "http://localhost:3000/input-nama?nama=" . urlencode($nama['pengirim']);
-// $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($nama['pengirim']).'&message=Karvelo punya edc untuk layanan tarik tunai bansos / uang dgn kartu atm seperti brilink, hub cs 081936391567&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
+        foreach ($data_nama as $pesData) {
+            $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
+// $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
 
             // Mengirimkan request GET menggunakan Laravel HTTP Client
             $response = Http::get($url);
@@ -105,10 +108,10 @@ class broad extends Controller
             $result = $response->body(); // Mendapatkan body dari response
             
            if($result === 'Status=5'){
-            echo "Permintaan gagal ke {$dta['nama']}\n";
+            echo "Permintaan gagal ke {$pesData['nama']}\n";
 
            } else{
-            echo "Permintaan berhasil ke {$dta['nama']}\n";
+            echo "Permintaan berhasil ke {$pesData['nama']}\n";
 
            }
                
@@ -125,6 +128,8 @@ class broad extends Controller
 
     public function selfKirim($kode)
     {
+        $tempes = Storage::disk('public')->get('tempes.txt');
+
         $data = DB::connection('sqlsrv')
         ->table('reseller')
         ->select('reseller.nama', 'reseller.kode', 'reseller.alamat', 'pengirim.pengirim')
@@ -143,9 +148,9 @@ class broad extends Controller
                 'pengirim' => $item->pengirim,
             ];
         });
-        foreach ($data_nama as $nama) {
-            $url = "http://localhost:3000/input-nama?nama=" . urlencode($nama['pengirim']);
-            // $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($nama['pengirim']).'&message=Karvelo punya edc untuk layanan tarik tunai bansos / uang dgn kartu atm seperti brilink, hub cs 081936391567&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
+        foreach ($data_nama as $pesData) {
+            $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
+            // $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
 
             // Mengirimkan request GET menggunakan Laravel HTTP Client
             $response = Http::get($url);
@@ -156,10 +161,10 @@ class broad extends Controller
             $result = $response->body(); // Mendapatkan body dari response
             
            if($result === 'Status=5'){
-            echo "Permintaan gagal ke {$nama['nama']}\n";
+            echo "Permintaan gagal ke {$pesData['nama']}\n";
 
            } else{
-            echo "Permintaan berhasil ke {$nama['nama']}\n";
+            echo "Permintaan berhasil ke {$pesData['nama']}\n";
 
            }
                
@@ -185,6 +190,8 @@ class broad extends Controller
         // Baca isi file CSV
         $content = Storage::disk('public')->get('data_dummy.csv');
     
+        $tempes = Storage::disk('public')->get('tempes.txt');
+
         // Pisahkan menjadi array per baris
         $rows = explode("\n", trim($content));
     
@@ -203,9 +210,9 @@ class broad extends Controller
         $urls = []; // Array untuk menyimpan URL
         
         // Mengumpulkan URL
-        foreach ($data_nama as $dta) {
-            // $url = "http://localhost:3000/input-nama?nama=" . urlencode($dta['pengirim']);
-            $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($dta['pengirim']).'&message=Karvelo punya edc untuk layanan tarik tunai bansos / uang dgn kartu atm seperti brilink, hub cs 081936391567&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
+        foreach ($data_nama as $pesData) {
+            // $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
+            $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
 
             $urls[] = $url;
         }
@@ -222,10 +229,10 @@ class broad extends Controller
             $result = $response->body(); // Mendapatkan body dari response
             
            if($result === 'Status=5'){
-            echo "Permintaan gagal ke {$dta['nama']}\n";
+            echo "Permintaan gagal ke {$pesData['nama']}\n";
 
            } else{
-            echo "Permintaan berhasil ke {$dta['nama']}\n";
+            echo "Permintaan berhasil ke {$pesData['nama']}\n";
 
            }
                
@@ -249,6 +256,10 @@ class broad extends Controller
 
     // Baca isi file CSV
     $content = Storage::disk('public')->get('data_dummy.csv');
+
+    // template untuk pesan
+    $tempes = Storage::disk('public')->get('tempes.txt');
+
 
     // Pisahkan menjadi array per baris
     $rows = explode("\n", trim($content));
@@ -277,9 +288,9 @@ class broad extends Controller
     $urls = []; // Array untuk menyimpan URL
 
     // Mengumpulkan URL
-    foreach ($data_nama as $dta) {
-        // $url = "http://localhost:3000/input-nama?nama=" . urlencode($dta['pengirim']);
-        $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($dta['pengirim']).'&message=Karvelo punya edc untuk layanan tarik tunai bansos / uang dgn kartu atm seperti brilink, hub cs 081936391567&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
+    foreach ($data_nama as $pesData) {
+        // $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
+        $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
 
         $urls[] = $url;
     }
@@ -296,10 +307,10 @@ class broad extends Controller
             $result = $response->body(); // Mendapatkan body dari response
 
            if($result === 'Status=5'){
-            echo "Permintaan gagal ke {$dta['nama']}\n";
+            echo "Permintaan gagal ke {$pesData['nama']}\n";
 
            } else{
-            echo "Permintaan berhasil ke {$dta['nama']}\n";
+            echo "Permintaan berhasil ke {$pesData['nama']}\n";
 
            }
                
@@ -333,6 +344,27 @@ class broad extends Controller
     $newFilePath = $request->file('file')->storeAs('public', 'data_dummy.csv'); // Mengganti dengan nama yang sama
 
     return back()->with('success', 'File CSV berhasil diganti!');
+}
+public function tempes(Request $request)
+    {
+        // Validasi file yang di-upload
+       // Validasi file yang di-upload
+       $request->validate([
+        'file' => 'required|file|mimes:csv,txt', // Hanya menerima file CSV atau TXT
+    ]);
+
+    // Tentukan nama file CSV lama yang akan diganti
+    $oldFilePath = 'public/tempes.txt'; // Ganti dengan path file CSV yang ingin diganti
+
+    // Hapus file lama jika ada
+    if (Storage::exists($oldFilePath)) {
+        Storage::delete($oldFilePath);
+    }
+
+    // Simpan file CSV baru di folder yang sama
+    $newFilePath = $request->file('file')->storeAs('public', 'tempes.txt'); // Mengganti dengan nama yang sama
+
+    return back()->with('success', 'File txt berhasil diganti!');
 }
 
 }

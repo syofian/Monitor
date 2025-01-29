@@ -64,22 +64,32 @@
     <div class="d-flex justify-content-left ml-3" style="gap: 10px;">
     <button class="btn btn-link" onclick="window.location.href='/broad'">Database</button>
     <button class="btn btn-success" onclick="window.location.href='/showfile'">CSV</button>
+    <button class="btn btn-link" onclick="window.location.href='/template_pesan'">Template Pesan</button>
 </div>
     <br>
     <div class="d-flex justify-content-between m-3">
-    <form action="{{ route('fileKirim') }}" method="POST">
-            @CSRF
-            <button type="submit" class="btn btn-primary">Kirim Semua Pesan</button>
+        <div>
+        <form action="{{ route('fileKirim') }}" method="POST">
+                @CSRF
+        <button type="submit" class="btn btn-primary">Kirim Semua Pesan</button>
         </form>
-
+     </div>
+    <div class="d-flex flex-column align-content-center justify-content-center" style="gap: 10px;">
     <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data">
     @csrf
+    
     <input type="file" name="file" required />
-    <button type="submit" class="btn btn-primary">Ganti</button>
+    <button type="submit" class="btn btn-primary">Data Broad Cast</button>
     </form>
 
+    <form action="{{ route('tempes') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <input type="file" name="file" required />
+    <button type="submit" class="btn btn-primary">Template Admin</button>
+    </form>
+     
     </div>
-
+</div>
     <div class="card-body">
         <div id="Mandarin" class="tabcontent">
             <!-- Table and Buttons -->
