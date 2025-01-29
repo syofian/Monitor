@@ -151,9 +151,11 @@ class broad extends Controller
         });
         
         foreach ($data_nama as $dta) {
-         
+            // Membuat URL berdasarkan data nama
             $url = "http://localhost:3000/input-nama?nama=" . urlencode($dta['nama']);
-
+            
+            // Menampilkan URL
+            echo $url . "<br>";
         }
         
         // Menampilkan hasil
