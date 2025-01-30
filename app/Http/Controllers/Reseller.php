@@ -44,43 +44,4 @@ class Reseller extends Controller
         return view('Reseller/reseller', compact('data'));
     }
 
-
-    public function show(Request $request,$id,$tgl1,$tgl2)
-    {
-         
-      
-        // $tgl1 = $request->input('tgl1');  
-        // $tgl2 = $request->input('tgl2');
-        $startutc = new UTCDateTime(strtotime($tgl1) * 1000); // Konversi ke milidetik
-        $endutc = new UTCDateTime(strtotime($tgl2) * 1000); // Konversi ke milidetik
-    
-        // Cek apakah nama kosong atau tidak
-        if ($tgl1=='null' && $tgl1=='null') {
-            // Jika nama diisi, lakukan pencarian berdasarkan nama
-            $test = DB::connection('mongodb')
-            ->collection('VoucherUsages')
-            ->where('ProductCode',$id)
-            ->where('Claimed',true)  
-            ->get();
-        } else {
-            $test = DB::connection('mongodb')
-            ->collection('VoucherUsages')
-            ->where('ProductCode',$id)
-            ->where('UsedAt','>=',$startutc)
-            ->where('UsedAt','<=',$endutc)  
-            ->where('Claimed',true)  
-            ->get();
-        }
-
-    //     $id = $request->query('id');  // Mendapatkan parameter 'id'
-    // $tgl1 = $request->query('date1');  // Mendapatkan parameter 'tgl1'
-    // $tgl2 = $request->query('date2');  // Mendapatkan parameter 'tgl2'
-    //     $startDateUTC = new UTCDateTime(strtotime($tgl1) * 1000); // Konversi ke milidetik
-    //     $endDateUTC = new UTCDateTime(strtotime($tgl2) * 1000); // Konversi ke milidetik
-        
-    
-        // Kirim data ke view 'monitor'
-        return view('detail', compact('test'));
-    }
-
 }

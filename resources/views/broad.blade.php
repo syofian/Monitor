@@ -65,22 +65,20 @@
 
     <div class="d-flex justify-content-left ml-3">
     <form action="{{ route('kirim', [
-    'startDate' => request()->has('date1') ? request()->input('date1') : '#', 
-    'endDate' => request()->has('date2') ? request()->input('date2') : '#'
+    'awal' => request()->has('awal') ? request()->input('awal') : '#', 
+    'akhir' => request()->has('akhir') ? request()->input('akhir') : '#'
 ]) }}" method="POST">
     @csrf <!-- Jangan lupa untuk menambahkan CSRF token -->
     <button type="submit" class="btn btn-primary">Kirim Semua Pesan</button>
   </form>
-  <div class="d-flex justify-content-center ml-3 gap-2">
-                <form action="{{ route('broad') }}" method="GET" class="d-flex gap-3 align-items-center" style="width: 600px;">
-                    <!-- Input Product Code (Lebar disesuaikan) -->
-                    <input type="date" name="date1"  value="{{ request('date1') }}" class="form-control" style="width: 200px;">
-                    <input type="date" name="date2"  value="{{ request('date2') }}" class="form-control" style="width: 200px;">
+  <div class="ml-3">
+  <form action="{{ route('broad') }}" class="d-flex" method="GET" style="width: 600px;">
+    <input type="text" name="awal" value="{{ request('awal') }}" class="form-control me-3" placeholder="Dari Data Ke" style="width: 200px;">
+    <input type="text" name="akhir" value="{{ request('akhir') }}" class="form-control me-3" placeholder="Jumlah Data" style="width: 200px;">
+    <button type="submit" class="btn btn-primary">Cari</button>
+</form>
 
 
-                    <!-- Tombol Submit -->
-                    <button type="submit" class="btn btn-primary">Cari</button>
-                </form>
             </div>
 </div>
 
@@ -92,8 +90,6 @@
                     <tr>
                         <th>No</th>
                         <th>Kode</th>
-                        <th>Nama</th>
-                        <th>Alamat</th>
                         <th>No Tlp</th>
                         <th>Kirim Manual</th>
                     </tr>
@@ -102,12 +98,10 @@
                     @foreach($data as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->kode }}</td>
-                            <td>{{ $item->nama }}</td>
-                            <td>{{ $item->alamat }}</td>
+                            <td>{{ $item->kode_reseller }}</td>
                             <td>{{ $item->pengirim }}</td>
                         <td>
-                        <form action="{{ route('selfKirim', ['kode' => $item->pengirim]) }}" method="POST">
+                        <form action="{{ route('selfKirim', ['pengirim' => $item->pengirim]) }}" method="POST">
     @csrf <!-- This directive is necessary for CSRF protection in Laravel -->
     <button type="submit" class="btn btn-primary">Kirim Pesan</button>
 </form>

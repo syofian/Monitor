@@ -98,8 +98,6 @@
                     <tr>
                         <th>No</th>
                         <th>Kode</th>
-                        <th>Nama</th>
-                        <th>Alamat</th>
                         <th>No HP</th>
                         <th>Kirim Manual</th>
                     </tr>
@@ -109,8 +107,6 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item['kode'] }}</td>
-                            <td>{{ $item['nama'] }}</td>
-                            <td>{{ $item['alamat'] }}</td>
                             <td>{{ $item['pengirim'] }}</td>
                             <td>
                         <form action="{{ route('fileManual', [$item['pengirim']]) }}" method="POST">

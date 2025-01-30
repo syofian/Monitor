@@ -133,32 +133,56 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-               @if(request()->path() == '/' || explode('.', request()->path())[0] == "voucher_detail")
-               <a href="{{ route('monitor') }}" class="nav-link active" style="background: #187ca4;">
+  @if(request()->path() == '/' || explode('.', request()->path())[0] == "voucher_detail")
+  <li class="nav-item">          
+  <a href="{{ route('monitor') }}" class="nav-link active" style="background: #187ca4;">
            <i class="nav-icon fas fa-tachometer-alt"></i>
            <p>Voucher Usages</p>
        </a>
    </li>
-   <li class="nav-item">
-       <a href="{{ route('broad') }}" class="nav-link">
-           <i class="nav-icon fas fa-book"></i>
-           <p>Broad Cast</p>
-       </a>
-   </li>
-@elseif(explode('.', request()->path())[0] == "broad" || explode('.', request()->path())[0] == "showfile")
+   @else
    <li class="nav-item">
        <a href="{{ route('monitor') }}" class="nav-link">
            <i class="nav-icon fas fa-tachometer-alt"></i>
            <p>Voucher Usages</p>
        </a>
    </li>
-   <li class="nav-item">
-       <a href="{{ route('broad') }}" class="nav-link active" style="background: #187ca4;">
-           <i class="nav-icon fas fa-book"></i>
+   @endif
+
+
+   @if(request()->path() == 'broad' || explode('.', request()->path())[0] == "showfile")
+   <li class="nav-item">           
+   <a href="{{ route('broad') }}" class="nav-link active" style="background: #187ca4;">
+           <i class="nav-icon fas fa-volume-up"></i>
            <p>Broad Cast</p>
        </a>
    </li>
-@endif
+   @else
+   <li class="nav-item">
+       <a href="{{ route('showfile') }}" class="nav-link">
+           <i class="nav-icon fas fa-volume-up"></i>
+           <p>Broad Cast</p>
+       </a>
+   </li>
+   @endif
+
+
+   @if(request()->path() == 'Reseller')
+   <li class="nav-item">    
+   <a href="{{ route('Reseller') }}" class="nav-link active" style="background: #187ca4;">
+           <i class="nav-icon fab fa-napster"></i>
+           <p>Reseller</p>
+       </a>
+   </li>
+   @else
+   <li class="nav-item">
+       <a href="{{ route('Reseller') }}" class="nav-link">
+           <i class="nav-icon		fab fa-napster"></i>
+           <p>Reseller</p>
+       </a>
+   </li>
+   @endif
+  
 
 
           

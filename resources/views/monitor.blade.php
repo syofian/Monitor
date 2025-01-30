@@ -84,7 +84,7 @@
                                 <td>{{ $item['_id'] }}</td>
                                 <td>{{ $item['total_count'] }}</td>
                                 <td>{{ $item['total_cashback'] }}</td>
-                                <td> <a href="{{ route('cek', [
+                                <td> <a href="{{ route('voucher_detail', [
     'id' => $item['_id'], 
     'tgl1' => request()->has('date1') ? request()->input('date1') : 'null', 
     'tgl2' => request()->has('date2') ? request()->input('date2') : 'null'

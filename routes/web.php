@@ -20,15 +20,15 @@ use App\Http\Controllers\Reseller; // Pastikan class controller di-import dengan
 
 //Voucher Usage-------------------------------------------------------------------------------------///
 Route::get('/', [Monitor::class, 'index'])->name('monitor');
-Route::get('voucher_detail.{id}.{tgl1}.{tgl2}', [Monitor::class, 'show'])->name('cek');
+Route::get('voucher_detail.{id}.{tgl1}.{tgl2}', [Monitor::class, 'show'])->name('voucher_detail');
 
 //Broadcast-------------------------------------------------------------------------------------///
 
 //Database
 Route::get('/broad', [broad::class, 'index'])->name('broad');
 Route::post('/post-data', [broad::class, 'postData'])->name('post');  // Untuk mengirim data ke API
-Route::post('/kirim-nama/{startDate}.{endDate}', [broad::class, 'kirimData'])->name('kirim');  // Untuk mengirim data ke API
-Route::post('/kirimself/{kode}', [broad::class, 'selfKirim'])->name('selfKirim');  // Untuk mengirim data ke API
+Route::post('/kirim-nama/{awal}.{akhir}', [broad::class, 'kirimData'])->name('kirim');  // Untuk mengirim data ke API
+Route::post('/kirimself/{pengirim}', [broad::class, 'selfKirim'])->name('selfKirim');  // Untuk mengirim data ke API
 
 //Data CSV
 Route::get('/showfile', [broad::class, 'showfile'])->name('showfile');
@@ -43,4 +43,3 @@ Route::get('/template_pesan', function () {
 
 //Reseller-------------------------------------------------------------------------------------///
 Route::get('/Reseller', [Reseller::class, 'index'])->name('Reseller');
-Route::get('reseller_detail.{id}.{tgl1}.{tgl2}', [Reseller::class, 'show'])->name('cek');

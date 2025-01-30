@@ -49,7 +49,16 @@
     <div class="card-header">
         <span>Reseller</span>
     </div>
-    
+    <br>
+    <div class="d-flex justify-content-center">
+                <form action="{{ route('Reseller') }}" method="GET" class="d-flex gap-3 align-items-center" style="width: 600px;">
+                   
+                    <input type="date" name="date1" value="{{ request('date1') }}" class="form-control">
+                    <input type="date" name="date2" value="{{ request('date2') }}" class="form-control">
+                    
+                    <button type="submit" class="btn btn-primary">Cari</button>
+                </form>
+            </div>
     <div class="card-body">
         <div id="Mandarin" class="tabcontent">
            

@@ -13,31 +13,28 @@ class broad extends Controller
 {
     public function index(Request $request)
     {
-        $startDate = $request->input('date1');  
-        $endDate =  $request->input('date2');
-        $kode =  $request->input('kode');
+     
+        $awal = $request->input('awal');  
+        $akhir =  $request->input('akhir');
 
-        if (!empty($startDate)) { 
+       if (!empty($awal) && !empty($akhir)) {
             $data = DB::connection('sqlsrv')
-            ->table('reseller')
-            ->select('reseller.nama', 'reseller.kode', 'reseller.alamat', 'pengirim.pengirim')
-            ->join('pengirim', 'reseller.kode', '=', 'pengirim.kode_reseller') 
-            ->where('reseller.tgl_aktivitas', '>', $startDate)  
-            ->where('reseller.tgl_aktivitas', '<', $endDate)
-            ->where('reseller.aktif', 1)
-            ->where('pengirim.tipe_pengirim', '=', 's') // Adding the condition for 'pengirim'
-            ->distinct() 
+            ->table('pengirim')
+            ->select('kode_reseller','tipe_pengirim', 'pengirim')
+            ->where('tipe_pengirim', '=', 's') // Adding the condition for 'pengirim'
+            ->orderBy('kode_reseller', 'asc')
+            ->skip($awal) // OFFSET 0 ROWS
+            ->take($akhir) // FETCH NEXT 10 ROWS ONLY
             ->get();
+        
         
         } else {
             $data = DB::connection('sqlsrv')
-            ->table('reseller')
-            ->select('reseller.nama', 'reseller.kode', 'reseller.alamat', 'pengirim.pengirim')
-            ->join('pengirim', 'reseller.kode', '=', 'pengirim.kode_reseller')    
-            ->distinct()
-            ->where('reseller.aktif', 1)
-            ->where('pengirim.tipe_pengirim', '=', 's') // Adding the condition for 'pengirim'
-            ->limit('100')
+            ->table('pengirim')
+            ->select('kode_reseller','tipe_pengirim', 'pengirim')
+            ->where('tipe_pengirim', '=', 's') // Adding the condition for 'pengirim'
+            ->orderBy('kode_reseller', 'asc')
+            ->limit(100)
             ->get();
         }
             return view('broad', compact('data'));
@@ -63,9 +60,7 @@ class broad extends Controller
         $data_nama = collect($data)->map(function ($item) {
             return [
                 'kode'   => $item[0],   
-                'nama'   => $item[1],   
-                'alamat' => $item[2], 
-                'pengirim' => $item[3], 
+                'pengirim' => $item[1], 
 
             ];
         });
@@ -74,25 +69,23 @@ class broad extends Controller
     
     }
 
-    public function kirimData($startDate,$endDate)
+    public function kirimData($awal,$akhir)
     {
         $tempes = Storage::disk('public')->get('tempes.txt');
 
         $data = DB::connection('sqlsrv')
-        ->table('reseller')
-        ->select('reseller.nama', 'reseller.kode', 'reseller.alamat', 'pengirim.pengirim')
-        ->join('pengirim', 'reseller.kode', '=', 'pengirim.kode_reseller') 
-        ->distinct('kode')
-        ->where('tgl_aktivitas', '>', $startDate)  
-        ->where('tgl_aktivitas', '<', $endDate)
-        ->where('pengirim.tipe_pengirim', '=', 's') // Adding the condition for 'pengirim'
-        ->where('reseller.aktif', 1)
+        ->table('pengirim')
+        ->select('kode_reseller','tipe_pengirim', 'pengirim')
+        ->where('tipe_pengirim', '=', 's') // Adding the condition for 'pengirim'
+        ->orderBy('kode_reseller', 'asc')
+        ->skip($awal) // OFFSET 0 ROWS
+        ->take($akhir) // FETCH NEXT 10 ROWS ONLY
         ->get();
          
         $data_nama = $data->map(function ($item) {
             return [
-                'nama' => $item->nama,
-                'kode' => $item->kode,
+             
+                'kode_reseller' => $item->kode_reseller,
                 'pengirim' => $item->pengirim,
             ];
         });
@@ -108,10 +101,10 @@ class broad extends Controller
             $result = $response->body(); // Mendapatkan body dari response
             
            if($result === 'Status=5'){
-            echo "Permintaan gagal ke {$pesData['nama']}\n";
+            echo "Permintaan gagal ke {$pesData['kode_reseller']}\n";
 
            } else{
-            echo "Permintaan berhasil ke {$pesData['nama']}\n";
+            echo "Permintaan berhasil ke {$pesData['kode_reseller']}\n";
 
            }
                
@@ -126,25 +119,22 @@ class broad extends Controller
         }
     }
 
-    public function selfKirim($kode)
+    public function selfKirim($pengirim)
     {
         $tempes = Storage::disk('public')->get('tempes.txt');
 
         $data = DB::connection('sqlsrv')
-        ->table('reseller')
-        ->select('reseller.nama', 'reseller.kode', 'reseller.alamat', 'pengirim.pengirim')
-        ->join('pengirim', 'reseller.kode', '=', 'pengirim.kode_reseller') 
-        ->distinct('kode')
-        ->where('pengirim.pengirim',$kode)  
-        ->where('pengirim.tipe_pengirim', '=', 's') // Adding the condition for 'pengirim'
-        ->where('reseller.aktif', 1)
-        // ->limit('1')
+        ->table('pengirim')
+        ->select('kode_reseller','tipe_pengirim', 'pengirim')
+        ->where('tipe_pengirim', '=', 's') // Adding the condition for 'pengirim'
+        ->where('pengirim', $pengirim) // Adding the condition for 'pengirim'
+        ->orderBy('kode_reseller', 'asc')
         ->get();
          
         $data_nama = $data->map(function ($item) {
             return [
-                'nama' => $item->nama,
-                'kode' => $item->kode,
+             
+                'kode_reseller' => $item->kode_reseller,
                 'pengirim' => $item->pengirim,
             ];
         });
@@ -161,10 +151,10 @@ class broad extends Controller
             $result = $response->body(); // Mendapatkan body dari response
             
            if($result === 'Status=5'){
-            echo "Permintaan gagal ke {$pesData['nama']}\n";
+            echo "Permintaan gagal ke {$pesData['kode_reseller']}\n";
 
            } else{
-            echo "Permintaan berhasil ke {$pesData['nama']}\n";
+            echo "Permintaan berhasil ke {$pesData['kode_reseller']}\n";
 
            }
                
@@ -200,10 +190,8 @@ class broad extends Controller
         // Mengonversi array ke koleksi Laravel
         $data_nama = collect($data)->map(function ($item) {
             return [
-                'kode'   => $item[0],   
-                'nama'   => $item[1],  
-                'alamat' => $item[2],   
-                'pengirim' => $item[3], 
+                'kode'   => $item[0],    
+                'pengirim' => $item[1], 
             ];
         });
         
@@ -211,8 +199,8 @@ class broad extends Controller
         
         // Mengumpulkan URL
         foreach ($data_nama as $pesData) {
-            // $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
-            $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
+            $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
+            // $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
 
             $urls[] = $url;
         }
@@ -229,10 +217,10 @@ class broad extends Controller
             $result = $response->body(); // Mendapatkan body dari response
             
            if($result === 'Status=5'){
-            echo "Permintaan gagal ke {$pesData['nama']}\n";
+            echo "Permintaan gagal ke {$pesData['kode']}\n";
 
            } else{
-            echo "Permintaan berhasil ke {$pesData['nama']}\n";
+            echo "Permintaan berhasil ke {$pesData['kode']}\n";
 
            }
                
@@ -269,7 +257,7 @@ class broad extends Controller
     
     // Filter data berdasarkan pengirim (kolom 1 adalah nama)
     $hasil = array_filter($data, function ($item) use ($pengirim) {
-        return isset($item[3]) && strtolower($item[3]) === strtolower($pengirim); // Pengirim di kolom 3
+        return isset($item[1]) && strtolower($item[1]) === strtolower($pengirim); // Pengirim di kolom 3
     });
 
     // Ambil header (baris pertama) jika perlu
@@ -279,9 +267,7 @@ class broad extends Controller
     $data_nama = collect($hasil)->map(function ($item) {
         return [
             'kode'   => $item[0],   // Ambil kode dari index ke-0
-            'nama'   => $item[1],   // Ambil nama dari index ke-1
-            'alamat' => $item[2],   // Ambil alamat dari index ke-2
-            'pengirim' => $item[3], // Ambil pengirim dari index ke-3
+            'pengirim' => $item[1], // Ambil pengirim dari index ke-3
         ];
     });
 
@@ -289,8 +275,8 @@ class broad extends Controller
 
     // Mengumpulkan URL
     foreach ($data_nama as $pesData) {
-        // $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
-        $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
+        $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
+        // $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
 
         $urls[] = $url;
     }
@@ -307,10 +293,10 @@ class broad extends Controller
             $result = $response->body(); // Mendapatkan body dari response
 
            if($result === 'Status=5'){
-            echo "Permintaan gagal ke {$pesData['nama']}\n";
+            echo "Permintaan gagal ke {$pesData['kode']}\n";
 
            } else{
-            echo "Permintaan berhasil ke {$pesData['nama']}\n";
+            echo "Permintaan berhasil ke {$pesData['kode']}\n";
 
            }
                
