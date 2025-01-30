@@ -90,8 +90,8 @@ class broad extends Controller
             ];
         });
         foreach ($data_nama as $pesData) {
-            $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
-// $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
+            // $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
+$url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
 
             // Mengirimkan request GET menggunakan Laravel HTTP Client
             $response = Http::get($url);
@@ -139,8 +139,8 @@ class broad extends Controller
             ];
         });
         foreach ($data_nama as $pesData) {
-            $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
-            // $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
+            // $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
+            $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
 
             // Mengirimkan request GET menggunakan Laravel HTTP Client
             $response = Http::get($url);
@@ -199,8 +199,8 @@ class broad extends Controller
         
         // Mengumpulkan URL
         foreach ($data_nama as $pesData) {
-            $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
-            // $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
+            // $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
+            $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
 
             $urls[] = $url;
         }
@@ -275,8 +275,8 @@ class broad extends Controller
 
     // Mengumpulkan URL
     foreach ($data_nama as $pesData) {
-        $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
-        // $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
+        // $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
+        $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
 
         $urls[] = $url;
     }
