@@ -31,6 +31,8 @@ class Reseller extends Controller
             ->where('IsFullyVerified',false )
             ->where('IsVerified',false )
             ->where('VerificationStage','=',2 )
+            ->where('KTPValidated',false )
+            ->where('SelfieValidated',false )
             ->get();
         } else {
             $data = DB::connection('mongodb')
@@ -38,6 +40,9 @@ class Reseller extends Controller
             ->where('IsFullyVerified',false )
             ->where('IsVerified',false )
             ->where('VerificationStage','=',2 )
+            ->where('KTPValidated',false )
+            ->where('SelfieValidated',false )
+            ->orderby('Kode','asc')
             ->get();
         }
         

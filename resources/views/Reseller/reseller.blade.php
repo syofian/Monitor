@@ -50,7 +50,7 @@
         <span>Reseller</span>
     </div>
     <br>
-    <div class="d-flex justify-content-center">
+    <!-- <div class="d-flex justify-content-center">
                 <form action="{{ route('Reseller') }}" method="GET" class="d-flex gap-3 align-items-center" style="width: 600px;">
                    
                     <input type="date" name="date1" value="{{ request('date1') }}" class="form-control">
@@ -58,7 +58,7 @@
                     
                     <button type="submit" class="btn btn-primary">Cari</button>
                 </form>
-            </div>
+            </div> -->
     <div class="card-body">
         <div id="Mandarin" class="tabcontent">
            
@@ -70,7 +70,9 @@
                             <th>No</th>  
                             <th>Kode</th>       
                             <th>Nama</th>         
-                            <th>Kode Level</th>    
+                            <th>Kode Level</th>
+                            <th>Status Validasi</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -80,6 +82,9 @@
                                 <td>{{ $item['Kode'] }}</td>
                                 <td>{{ $item['Nama'] }}</td>
                                 <td>{{ $item['KodeLevel'] }}</td>
+                                <td>KTP/Selfie Need Review</td>
+                              
+                               
                                 
                              
                                                        

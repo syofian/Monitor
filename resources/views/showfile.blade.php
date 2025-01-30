@@ -85,7 +85,7 @@
     <form action="{{ route('tempes') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <input type="file" name="file" required />
-    <button type="submit" class="btn btn-primary">Template Admin</button>
+    <button type="submit" class="btn btn-primary">Template Pesan</button>
     </form>
      
     </div>
