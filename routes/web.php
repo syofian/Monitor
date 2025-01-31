@@ -43,3 +43,5 @@ Route::get('/template_pesan', function () {
 
 //Reseller-------------------------------------------------------------------------------------///
 Route::get('/Reseller', [Reseller::class, 'index'])->name('Reseller');
+
+Route::get('export-reseller-csv', [Reseller::class, 'exportResellerData'])->name('export.reseller.csv');

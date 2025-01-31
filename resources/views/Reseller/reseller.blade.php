@@ -59,6 +59,10 @@
                     <button type="submit" class="btn btn-primary">Cari</button>
                 </form>
             </div> -->
+             <div class="d-flex justify-content-left  m-3">
+             <a href="{{ route('export.reseller.csv') }}">Download CSV</a>
+
+            </div>
     <div class="card-body">
         <div id="Mandarin" class="tabcontent">
            
