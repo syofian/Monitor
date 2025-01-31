@@ -22,6 +22,7 @@ class broad extends Controller
             ->table('pengirim')
             ->select('kode_reseller','tipe_pengirim', 'pengirim')
             ->where('tipe_pengirim', '=', 's') // Adding the condition for 'pengirim'
+            ->distinct()
             ->orderBy('kode_reseller', 'asc')
             ->skip($awal) // OFFSET 0 ROWS
             ->take($akhir) // FETCH NEXT 10 ROWS ONLY
@@ -33,6 +34,7 @@ class broad extends Controller
             ->table('pengirim')
             ->select('kode_reseller','tipe_pengirim', 'pengirim')
             ->where('tipe_pengirim', '=', 's') // Adding the condition for 'pengirim'
+            ->distinct()
             ->orderBy('kode_reseller', 'asc')
             ->limit(100)
             ->get();
@@ -77,6 +79,7 @@ class broad extends Controller
         ->table('pengirim')
         ->select('kode_reseller','tipe_pengirim', 'pengirim')
         ->where('tipe_pengirim', '=', 's') // Adding the condition for 'pengirim'
+        ->distinct()
         ->orderBy('kode_reseller', 'asc')
         ->skip($awal) // OFFSET 0 ROWS
         ->take($akhir) // FETCH NEXT 10 ROWS ONLY
@@ -128,6 +131,7 @@ $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jay
         ->select('kode_reseller','tipe_pengirim', 'pengirim')
         ->where('tipe_pengirim', '=', 's') // Adding the condition for 'pengirim'
         ->where('pengirim', $pengirim) // Adding the condition for 'pengirim'
+        ->distinct()
         ->orderBy('kode_reseller', 'asc')
         ->get();
          
