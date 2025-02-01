@@ -57,13 +57,13 @@
     <div class="d-flex justify-content-left ml-3" style="gap: 10px;">
     <button class="btn btn-success" onclick="window.location.href='/broad'">Database</button>
     <button class="btn btn-link" onclick="window.location.href='/showfile'">CSV</button>
-    <button class="btn btn-link" onclick="window.location.href='/template_pesan'">Template Pesan</button>
+    <button class="btn btn-link" onclick="window.location.href='/Pesan'">Template Pesan</button>
 
 </div>
 
 <br>
 
-    <div class="d-flex justify-content-left ml-3">
+    <div class="d-flex d-flex justify-content-between m-3 ml-3">
     <form action="{{ route('kirim', [
     'awal' => request()->has('awal') ? request()->input('awal') : '#', 
     'akhir' => request()->has('akhir') ? request()->input('akhir') : '#'
@@ -71,7 +71,7 @@
     @csrf <!-- Jangan lupa untuk menambahkan CSRF token -->
     <button type="submit" class="btn btn-primary">Kirim Semua Pesan</button>
   </form>
-  <div class="ml-3">
+  <div class=" d-flex flex-column align-content-center justify-content-center ml-3" style="gap: 10px;">
   <form action="{{ route('broad') }}" class="d-flex" method="GET" style="width: 600px;">
     <input type="text" name="awal" value="{{ request('awal') }}" class="form-control me-3" placeholder="Dari Data Ke" style="width: 200px;">
     <input type="text" name="akhir" value="{{ request('akhir') }}" class="form-control me-3" placeholder="Jumlah Data" style="width: 200px;">

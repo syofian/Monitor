@@ -64,7 +64,7 @@
     <div class="d-flex justify-content-left ml-3" style="gap: 10px;">
     <button class="btn btn-link" onclick="window.location.href='/broad'">Database</button>
     <button class="btn btn-success" onclick="window.location.href='/showfile'">CSV</button>
-    <button class="btn btn-link" onclick="window.location.href='/template_pesan'">Template Pesan</button>
+    <button class="btn btn-link" onclick="window.location.href='/Pesan'">Template Pesan</button>
 </div>
     <br>
     <div class="d-flex justify-content-between m-3">

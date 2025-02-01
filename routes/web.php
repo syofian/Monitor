@@ -36,10 +36,21 @@ Route::post('/fileManual/{pengirim}', [broad::class, 'fileManual'])->name('fileM
 Route::post('/fileKirim', [broad::class, 'fileKirim'])->name('fileKirim');
 Route::post('/import', [broad::class, 'import'])->name('import');
 Route::post('/tempes', [broad::class, 'tempes'])->name('tempes');
-Route::get('/template_pesan', function () {
-    $tempes = Storage::disk('public')->get('tempes.txt');
-    return "<h1>{$tempes}</h1>"; // Mengembalikan teks sebagai HTML
-});
+// Route::get('/template_pesan', function () {
+//     $tempes = Storage::disk('public')->get('tempes.txt');
+//     return "<h1>{$tempes}</h1>"; // Mengembalikan teks sebagai HTML
+// });
+Route::get('/Pesan', [broad::class, 'Pesan'])->name('Pesan');
+Route::post('/addPesan', [broad::class, 'addPesan'])->name('addPesan');
+Route::put('/editPesan{id}', [broad::class, 'editPesan'])->name('editPesan');
+Route::put('/aktivasiPesan{id}', [broad::class, 'aktivasiPesan'])->name('aktivasiPesan');
+
+Route::delete('/deletePesan{id}', [broad::class, 'deletePesan'])->name('deletePesan');
+
+
+
+
+
 
 //Reseller-------------------------------------------------------------------------------------///
 Route::get('/Reseller', [Reseller::class, 'index'])->name('Reseller');

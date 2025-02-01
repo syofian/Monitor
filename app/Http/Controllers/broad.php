@@ -13,7 +13,7 @@ class broad extends Controller
 {
     public function index(Request $request)
     {
-     
+       
         $awal = $request->input('awal');  
         $akhir =  $request->input('akhir');
 
@@ -73,7 +73,10 @@ class broad extends Controller
 
     public function kirimData($awal,$akhir)
     {
-        $tempes = Storage::disk('public')->get('tempes.txt');
+        $tempes = DB::connection('mysql')
+        ->table('pesan')
+        ->where('status', 1)
+        ->get();
 
         $data = DB::connection('sqlsrv')
         ->table('pengirim')
@@ -250,7 +253,14 @@ $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jay
     $content = Storage::disk('public')->get('data_dummy.csv');
 
     // template untuk pesan
-    $tempes = Storage::disk('public')->get('tempes.txt');
+    $tempes = DB::connection('mysql')
+    ->table('pesan')
+    ->where('status', 1)
+    ->pluck('template');  // Plucking only the 'status' column
+
+    $templateString = $tempes->implode(', ');  // This will separate the templates by a comma
+
+
 
 
     // Pisahkan menjadi array per baris
@@ -279,8 +289,8 @@ $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jay
 
     // Mengumpulkan URL
     foreach ($data_nama as $pesData) {
-        // $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
-        $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
+        $url = "http://localhost:3000/input-nama?nama=" . urlencode($templateString);
+        // $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
 
         $urls[] = $url;
     }
@@ -335,26 +345,112 @@ $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jay
 
     return back()->with('success', 'File CSV berhasil diganti!');
 }
-public function tempes(Request $request)
+// public function tempes(Request $request)
+//     {
+//         // Validasi file yang di-upload
+//        // Validasi file yang di-upload
+//        $request->validate([
+//         'file' => 'required|file|mimes:csv,txt', // Hanya menerima file CSV atau TXT
+//     ]);
+
+//     // Tentukan nama file CSV lama yang akan diganti
+//     $oldFilePath = 'public/tempes.txt'; // Ganti dengan path file CSV yang ingin diganti
+
+//     // Hapus file lama jika ada
+//     if (Storage::exists($oldFilePath)) {
+//         Storage::delete($oldFilePath);
+//     }
+
+//     // Simpan file CSV baru di folder yang sama
+//     $newFilePath = $request->file('file')->storeAs('public', 'tempes.txt'); // Mengganti dengan nama yang sama
+
+//     return back()->with('success', 'File txt berhasil diganti!');
+// }
+
+public function Pesan(Request $request)
     {
-        // Validasi file yang di-upload
-       // Validasi file yang di-upload
-       $request->validate([
-        'file' => 'required|file|mimes:csv,txt', // Hanya menerima file CSV atau TXT
-    ]);
+        $countStatus= DB::connection('mysql')->table('pesan')->where('status', 1)->count();
 
-    // Tentukan nama file CSV lama yang akan diganti
-    $oldFilePath = 'public/tempes.txt'; // Ganti dengan path file CSV yang ingin diganti
-
-    // Hapus file lama jika ada
-    if (Storage::exists($oldFilePath)) {
-        Storage::delete($oldFilePath);
-    }
-
-    // Simpan file CSV baru di folder yang sama
-    $newFilePath = $request->file('file')->storeAs('public', 'tempes.txt'); // Mengganti dengan nama yang sama
-
-    return back()->with('success', 'File txt berhasil diganti!');
+            $data = DB::connection('mysql')
+            ->table('pesan')
+            ->get();
+        
+            return view('Pesan/template', compact('data','countStatus'));
 }
 
+public function editPesan(Request $request, $id)
+{
+    
+    DB::connection('mysql')
+        ->table('pesan')
+        ->where('id', $id)
+        ->update([
+            'template' => $request->input('template'),
+            // Add more fields as necessary
+        ]);
+
+    return redirect()->route('Pesan')->with('success', 'Pesan updated successfully!');
+}
+
+public function aktivasiPesan(Request $request, $id)
+{
+    $newStatus = $request->input('status'); // the status you want to set
+    $countStatus= DB::connection('mysql')->table('pesan')->where('status', 1)->count();
+    $countStatus2= DB::connection('mysql')->table('pesan')->where('status', 2)->count();
+
+    if ($countStatus == 0 ) {
+        DB::connection('mysql')
+        ->table('pesan')
+        ->where('id', $id)
+        ->update([
+            'status' => 1,
+        ]);
+
+        return redirect()->route('Pesan')->with('success', 'Pesan updated successfully!');
+
+    }
+    elseif ($countStatus2 >= 1 ) {
+        DB::connection('mysql')
+        ->table('pesan')
+        ->where('id', $id)
+        ->update([
+            'status' => 2,
+        ]);
+
+        return redirect()->route('Pesan')->with('success', 'Pesan updated successfully!');
+
+    }
+    else {
+        return redirect()->route('Pesan')->with('error', 'Only one record can have status = 1.');
+    }
+
+
+   
+}
+
+public function deletePesan(Request $request, $id)
+{
+    
+    DB::connection('mysql')
+        ->table('pesan')
+        ->where('id', $id)
+        ->delete();
+
+    return redirect()->route('Pesan')->with('success', 'Pesan updated successfully!');
+}
+
+public function addPesan(Request $request)
+{
+    
+    DB::connection('mysql')
+    ->table('pesan')
+    ->insert([
+        'template' => $request->input('template'),  // Assuming 'template' is being passed
+        'status' => 2,  // Status set to 1 (active)
+       
+    ]);
+
+
+    return redirect()->route('Pesan')->with('success', 'Pesan updated successfully!');
+}
 }
