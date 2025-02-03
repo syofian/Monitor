@@ -119,7 +119,7 @@
                     @csrf
                     @method('PUT')
                     <div class="mb-3">
-                        <label for="template" class="form-label">Template</label>
+                        <label for="template" class="form-label">Pin</label>
                         <input type="text" class="form-control" id="pin" name="Pin" required>
                     </div>
                     <button type="submit" class="btn btn-success">Simpan</button>
