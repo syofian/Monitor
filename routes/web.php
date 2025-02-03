@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Monitor; // Pastikan class controller di-import dengan benar
 use App\Http\Controllers\broad; // Pastikan class controller di-import dengan benar
 use App\Http\Controllers\Reseller; // Pastikan class controller di-import dengan benar
+use App\Http\Controllers\CrudResellerMongo; // Pastikan class controller di-import dengan benar
 
 
 /*
@@ -20,7 +21,7 @@ use App\Http\Controllers\Reseller; // Pastikan class controller di-import dengan
 
 //Voucher Usage-------------------------------------------------------------------------------------///
 Route::get('/', [Monitor::class, 'index'])->name('monitor');
-Route::get('voucher_detail.{id}.{tgl1}.{tgl2}', [Monitor::class, 'show'])->name('voucher_detail');
+Route::get('voucher_detail.{id}.{tgl1}.{tgl2}.{status}', [Monitor::class, 'show'])->name('voucher_detail');
 
 //Broadcast-------------------------------------------------------------------------------------///
 
@@ -56,3 +57,9 @@ Route::delete('/deletePesan{id}', [broad::class, 'deletePesan'])->name('deletePe
 Route::get('/Reseller', [Reseller::class, 'index'])->name('Reseller');
 
 Route::get('export-reseller-csv', [Reseller::class, 'exportResellerData'])->name('export.reseller.csv');
+
+
+// Crud ResellerMongo
+
+Route::get('/ResellerMongo', [CrudResellerMongo::class, 'index'])->name('ResellerMongo');
+Route::put('/editResellerMongo{id}', [CrudResellerMongo::class, 'edit'])->name('editResellerMongo');

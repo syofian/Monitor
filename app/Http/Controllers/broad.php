@@ -39,7 +39,7 @@ class broad extends Controller
             ->limit(100)
             ->get();
         }
-            return view('broad', compact('data'));
+            return view('Broadcast/broad', compact('data'));
     }
 
     public function showfile(Request $request)
@@ -67,7 +67,7 @@ class broad extends Controller
             ];
         });
         
-        return view('showfile', compact('data_nama'));
+        return view('Broadcast/showfile', compact('data_nama'));
     
     }
 

@@ -15,6 +15,8 @@ class Monitor extends Controller
     public function index(Request $request)
     {
         $ProductCode = $request->input('ProductCode');  // Ambil nilai nama dari form
+        $status = $request->input('status');  // Ambil nilai nama dari form
+
         $startDate = $request->input('date1');  
         $endDate =  $request->input('date2'); 
         $startDateUTC = new UTCDateTime(strtotime($startDate) * 1000); // Konversi ke milidetik
@@ -24,10 +26,10 @@ class Monitor extends Controller
             // Jika nama diisi, lakukan pencarian berdasarkan nama
             $test = DB::connection('mongodb')
             ->collection('VoucherUsages')
-            ->raw(function ($collection) use ($ProductCode, $startDateUTC, $endDateUTC) {
+            ->raw(function ($collection) use ($ProductCode, $startDateUTC, $endDateUTC, $status) {
                 return $collection->aggregate([
                     ['$match' => ['ProductCode' => $ProductCode,
-                    'Claimed' => true,
+                    'Claimed' => $status === 'true' ? true : false,
                     'UsedAt' => [
                         '$gte' => $startDateUTC,  // Filter mulai tanggal
                         '$lte' => $endDateUTC     // Filter sampai tanggal
@@ -56,8 +58,8 @@ class Monitor extends Controller
         ->collection('VoucherUsages')
         ->raw(function ($collection) use ($ProductCode) {
             return $collection->aggregate([
-                ['$match' => ['Claimed' => true
-                ]], // Filter berdasarkan ProductCode
+                // ['$match' => ['Claimed' => true
+                // ]], // Filter berdasarkan ProductCode
                 ['$group' => [
                     '_id' => '$ProductCode',
                     'total_count' => ['$sum' => 1], // Hitung jumlah data
@@ -87,7 +89,7 @@ class Monitor extends Controller
     }
 
 
-    public function show(Request $request,$id,$tgl1,$tgl2)
+    public function show(Request $request,$id,$tgl1,$tgl2,$status)
     {
          
       
@@ -110,7 +112,7 @@ class Monitor extends Controller
             ->where('ProductCode',$id)
             ->where('UsedAt','>=',$startutc)
             ->where('UsedAt','<=',$endutc)  
-            ->where('Claimed',true)  
+            ->where('Claimed',$status === 'true' ? true : false)  
             ->get();
         }
 

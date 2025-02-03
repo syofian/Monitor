@@ -52,20 +52,25 @@
     
     <div class="card-body">
         <div id="Mandarin" class="tabcontent">
-            <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-start">
                 <form action="{{ route('monitor') }}" method="GET" class="d-flex gap-3 align-items-center" style="width: 600px;">
                     <!-- Input Product Code (Lebar disesuaikan) -->
-                    <input type="text" name="ProductCode" id="ProductCode" value="{{ request('ProductCode') }}" class="form-control" style="width: 200px;">
+                    <input type="text" name="ProductCode" id="ProductCode" value="{{ request('ProductCode') }}" class="form-control" style="width: 200px;" required>
                     
                     <!-- Input Tanggal -->
-                    <input type="date" name="date1" value="{{ request('date1') }}" class="form-control">
-                    <input type="date" name="date2" value="{{ request('date2') }}" class="form-control">
+                    <input type="date" name="date1" value="{{ request('date1') }}" class="form-control" required>
+                    <input type="date" name="date2" value="{{ request('date2') }}" class="form-control" required>
                     
+                    <select name="status" class="form-control" id="status" style="width: 100px;" required>
+  <option value="true">Berhasil</option>
+  <option value="false">Gagal</option>
+</select>
+
                     <!-- Tombol Submit -->
                     <button type="submit" class="btn btn-primary">Cari</button>
                 </form>
             </div>
-            
+            <br>
          
                 <table id="tableMandarin" class="table table-bordered table-striped">
                     <thead>
@@ -87,7 +92,9 @@
                                 <td> <a href="{{ route('voucher_detail', [
     'id' => $item['_id'], 
     'tgl1' => request()->has('date1') ? request()->input('date1') : 'null', 
-    'tgl2' => request()->has('date2') ? request()->input('date2') : 'null'
+    'tgl2' => request()->has('date2') ? request()->input('date2') : 'null',
+    'status' => request()->has('status') ? request()->input('status') : 'null'
+
 ]) }}" class="btn-cekmonitor">
     Detail
 </a>

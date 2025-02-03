@@ -182,6 +182,22 @@
        </a>
    </li>
    @endif
+
+   @if(request()->path() == 'ResellerMongo')
+   <li class="nav-item">    
+   <a href="{{ route('ResellerMongo') }}" class="nav-link active" style="background: #187ca4;">
+           <i class="nav-icon fa fa-key"></i>
+           <p>Reseller Pin</p>
+       </a>
+   </li>
+   @else
+   <li class="nav-item">
+       <a href="{{ route('ResellerMongo') }}" class="nav-link">
+           <i class="nav-icon		fa fa-key"></i>
+           <p>Reseller Pin</p>
+       </a>
+   </li>
+   @endif
   
 
 

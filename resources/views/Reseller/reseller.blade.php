@@ -47,7 +47,7 @@
 
 <div class="card card-primary">
     <div class="card-header">
-        <span>Reseller</span>
+        <span>Reseller Verification</span>
     </div>
     <br>
     <!-- <div class="d-flex justify-content-center">
