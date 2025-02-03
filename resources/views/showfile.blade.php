@@ -82,11 +82,11 @@
     <button type="submit" class="btn btn-primary">Data Broad Cast</button>
     </form>
 
-    <form action="{{ route('tempes') }}" method="POST" enctype="multipart/form-data">
+    <!-- <form action="{{ route('tempes') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <input type="file" name="file" required />
     <button type="submit" class="btn btn-primary">Template Pesan</button>
-    </form>
+    </form> -->
      
     </div>
 </div>
