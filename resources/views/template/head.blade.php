@@ -171,14 +171,14 @@
    <li class="nav-item">    
    <a href="{{ route('Reseller') }}" class="nav-link active" style="background: #187ca4;">
            <i class="nav-icon fab fa-napster"></i>
-           <p>Reseller</p>
+           <p>Reseller Verification</p>
        </a>
    </li>
    @else
    <li class="nav-item">
        <a href="{{ route('Reseller') }}" class="nav-link">
            <i class="nav-icon		fab fa-napster"></i>
-           <p>Reseller</p>
+           <p>Reseller Verification</p>
        </a>
    </li>
    @endif
