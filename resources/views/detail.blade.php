@@ -83,7 +83,8 @@
                                 <td>{{ $item['ProductCode'] }}</td>
                                 <td>{{ $item['ResellerCode'] }}</td>
                                 <td>{{ $item['Cashback'] }}</td>
-                                <td>{{ date('d F Y h:i A', strtotime($item['UsedAt'])) }}</td>
+                                <td>{{ \Carbon\Carbon::createFromTimestampMs($item['UsedAt'])->locale('id')->isoFormat('YYYY-MM-DD dddd hh:mm A') }}</td>
+
 
 
                                

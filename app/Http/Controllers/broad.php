@@ -73,10 +73,13 @@ class broad extends Controller
 
     public function kirimData($awal,$akhir)
     {
+        // $tempes = Storage::disk('public')->get('tempes.txt');
         $tempes = DB::connection('mysql')
         ->table('pesan')
         ->where('status', 1)
-        ->get();
+        ->pluck('template');  // Plucking only the 'status' column
+
+        $templateString = $tempes->implode(', ');  // This will separate the templates by a comma
 
         $data = DB::connection('sqlsrv')
         ->table('pengirim')
@@ -96,8 +99,8 @@ class broad extends Controller
             ];
         });
         foreach ($data_nama as $pesData) {
-            // $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
-$url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
+            $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim'].$templateString);
+// $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
 
             // Mengirimkan request GET menggunakan Laravel HTTP Client
             $response = Http::get($url);
@@ -127,7 +130,15 @@ $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jay
 
     public function selfKirim($pengirim)
     {
-        $tempes = Storage::disk('public')->get('tempes.txt');
+        // $tempes = Storage::disk('public')->get('tempes.txt');
+        
+        $tempes = DB::connection('mysql')
+        ->table('pesan')
+        ->where('status', 1)
+        ->pluck('template');  // Plucking only the 'status' column
+    
+        $templateString = $tempes->implode(', ');  // This will separate the templates by a comma
+    
 
         $data = DB::connection('sqlsrv')
         ->table('pengirim')
@@ -146,8 +157,8 @@ $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jay
             ];
         });
         foreach ($data_nama as $pesData) {
-            // $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
-            $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
+            $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim'].$templateString);
+            // $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($templateString) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
 
             // Mengirimkan request GET menggunakan Laravel HTTP Client
             $response = Http::get($url);
@@ -186,8 +197,17 @@ $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jay
     
         // Baca isi file CSV
         $content = Storage::disk('public')->get('data_dummy.csv');
+        // Ini untuk ganti data menggunakan txt
+        // $tempes = Storage::disk('public')->get('tempes.txt');
+
+        $tempes = DB::connection('mysql')
+        ->table('pesan')
+        ->where('status', 1)
+        ->pluck('template');  // Plucking only the 'status' column
     
-        $tempes = Storage::disk('public')->get('tempes.txt');
+        $templateString = $tempes->implode(', ');  // This will separate the templates by a comma
+    
+    
 
         // Pisahkan menjadi array per baris
         $rows = explode("\n", trim($content));
@@ -206,8 +226,8 @@ $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jay
         
         // Mengumpulkan URL
         foreach ($data_nama as $pesData) {
-            // $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim']);
-            $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
+            $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim'].$templateString);
+            // $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($templateString) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
 
             $urls[] = $url;
         }
@@ -243,85 +263,81 @@ $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jay
     }
 
     public function fileManual(Request $request, $pengirim)
-{
-    // Pastikan file ada sebelum membacanya
-    if (!Storage::disk('public')->exists('data_dummy.csv')) {
-        return back()->with('error', 'File tidak ditemukan.');
-    }
+    {
+        // Pastikan file ada sebelum membacanya
+        if (!Storage::disk('public')->exists('data_dummy.csv')) {
+            return back()->with('error', 'File tidak ditemukan.');
+        }
 
-    // Baca isi file CSV
-    $content = Storage::disk('public')->get('data_dummy.csv');
+        // Baca isi file CSV
+        $content = Storage::disk('public')->get('data_dummy.csv');
+        // Pisahkan menjadi array per baris
+        $rows = explode("\n", trim($content));
 
-    // template untuk pesan
-    $tempes = DB::connection('mysql')
-    ->table('pesan')
-    ->where('status', 1)
-    ->pluck('template');  // Plucking only the 'status' column
+        // Ubah setiap baris menjadi array menggunakan str_getcsv
+        $data = array_map('str_getcsv', array_filter($rows));  // Mengubah rows menjadi array
+        
+        // Filter data berdasarkan pengirim (kolom 1 adalah nama)
+        $hasil = array_filter($data, function ($item) use ($pengirim) {
+            return isset($item[1]) && strtolower($item[1]) === strtolower($pengirim); // Pengirim di kolom 3
+        });
 
-    $templateString = $tempes->implode(', ');  // This will separate the templates by a comma
+        // Ambil header (baris pertama) jika perlu
+        $header = array_shift($data);
+          // template untuk pesan
 
+        $tempes = DB::connection('mysql')
+        ->table('pesan')
+        ->where('status', 1)
+        ->pluck('template');  // Plucking only the 'status' column
 
+        $templateString = $tempes->implode(', ');  // This will separate the templates by a comma
 
+        // Map data yang difilter
+        $data_nama = collect($hasil)->map(function ($item) {
+            return [
+                'kode'   => $item[0],   // Ambil kode dari index ke-0
+                'pengirim' => $item[1], // Ambil pengirim dari index ke-3
+            ];
+        });
 
-    // Pisahkan menjadi array per baris
-    $rows = explode("\n", trim($content));
+        $urls = []; // Array untuk menyimpan URL
 
-    // Ubah setiap baris menjadi array menggunakan str_getcsv
-    $data = array_map('str_getcsv', array_filter($rows));  // Mengubah rows menjadi array
-    
-    // Filter data berdasarkan pengirim (kolom 1 adalah nama)
-    $hasil = array_filter($data, function ($item) use ($pengirim) {
-        return isset($item[1]) && strtolower($item[1]) === strtolower($pengirim); // Pengirim di kolom 3
-    });
+        // Mengumpulkan URL
+        foreach ($data_nama as $pesData) {
+            $url = "http://localhost:3000/input-nama?nama=" . urlencode($pesData['pengirim'].$templateString);
+            // $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($templateString) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
 
-    // Ambil header (baris pertama) jika perlu
-    $header = array_shift($data);
+            $urls[] = $url;
+        }
 
-    // Map data yang difilter
-    $data_nama = collect($hasil)->map(function ($item) {
-        return [
-            'kode'   => $item[0],   // Ambil kode dari index ke-0
-            'pengirim' => $item[1], // Ambil pengirim dari index ke-3
-        ];
-    });
+        $results = []; // Untuk menyimpan hasil response
 
-    $urls = []; // Array untuk menyimpan URL
+        // Mengirim permintaan untuk setiap URL
+        foreach ($urls as $url) {
+        
+                $response = Http::get($url);
 
-    // Mengumpulkan URL
-    foreach ($data_nama as $pesData) {
-        $url = "http://localhost:3000/input-nama?nama=" . urlencode($templateString);
-        // $url ='https://sms-api.jatismobile.com/index.ashx?userid=jayawisata&password=jayawisata123&msisdn=' . urlencode($pesData['pengirim']).'&message='. urlencode($tempes) .'&sender=KARVELO&division=AJW&batchname=willy&uploadby=willy&channel=2'; 
+                if ($response->successful()) {
+                    // Jika berhasil, ambil hasilnya
+                $result = $response->body(); // Mendapatkan body dari response
 
-        $urls[] = $url;
-    }
+            if($result === 'Status=5'){
+                echo "Permintaan gagal ke {$pesData['kode']}\n";
 
-    $results = []; // Untuk menyimpan hasil response
+            } else{
+                echo "Permintaan berhasil ke {$pesData['kode']}\n";
 
-    // Mengirim permintaan untuk setiap URL
-    foreach ($urls as $url) {
-     
-            $response = Http::get($url);
-
-            if ($response->successful()) {
-                // Jika berhasil, ambil hasilnya
-            $result = $response->body(); // Mendapatkan body dari response
-
-           if($result === 'Status=5'){
-            echo "Permintaan gagal ke {$pesData['kode']}\n";
-
-           } else{
-            echo "Permintaan berhasil ke {$pesData['kode']}\n";
-
-           }
-               
-            } else {
-                // Jika gagal, tampilkan pesan error
-                return response()->json([
-
-                    'message' => 'Gagal mengirim permintaan ke SMS API.',
-                ]);
             }
-        } 
+                
+                } else {
+                    // Jika gagal, tampilkan pesan error
+                    return response()->json([
+
+                        'message' => 'Gagal mengirim permintaan ke SMS API.',
+                    ]);
+                }
+            } 
     }
 
     public function import(Request $request)

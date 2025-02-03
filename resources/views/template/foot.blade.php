@@ -39,13 +39,10 @@
 <script src="asset/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="asset/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<!-- Include jQuery (for Bootstrap 4 and earlier, but Bootstrap 5 doesn't require it) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Include Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Modal -->
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
 
 <!-- AdminLTE App -->
