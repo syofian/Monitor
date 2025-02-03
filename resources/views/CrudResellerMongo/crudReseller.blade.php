@@ -92,7 +92,7 @@
 <td>
 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
                     data-id="{{ $item['Kode'] }}" data-pin="{{ $item['Pin'] }}" >
-                Edit
+                <i class="fa fa-edit"></i>
             </button>
 </td>
 

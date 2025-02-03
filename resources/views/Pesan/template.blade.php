@@ -119,14 +119,14 @@
 <td>
 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
                     data-id="{{ $item->id }}" data-template="{{ $item->template }}">
-                Edit
+               <i class="fa fa-edit"></i>
             </button>
 </td>
 <td>
 <form action="{{ route('deletePesan', ['id' => $item->id]) }}" method="POST">
             @csrf
             @method('DELETE')
-            <button type="submit" class="btn btn-danger">Hapus</button>
+            <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>
         </form>
 </td>
 
