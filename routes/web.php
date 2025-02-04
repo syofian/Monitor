@@ -5,6 +5,7 @@ use App\Http\Controllers\Monitor; // Pastikan class controller di-import dengan 
 use App\Http\Controllers\broad; // Pastikan class controller di-import dengan benar
 use App\Http\Controllers\Reseller; // Pastikan class controller di-import dengan benar
 use App\Http\Controllers\CrudResellerMongo; // Pastikan class controller di-import dengan benar
+use App\Http\Controllers\Traffic; // Pastikan class controller di-import dengan benar
 
 
 /*
@@ -63,3 +64,8 @@ Route::get('export-reseller-csv', [Reseller::class, 'exportResellerData'])->name
 
 Route::get('/ResellerMongo', [CrudResellerMongo::class, 'index'])->name('ResellerMongo');
 Route::put('/editResellerMongo{id}', [CrudResellerMongo::class, 'edit'])->name('editResellerMongo');
+
+
+//Traffic
+Route::get('/traffic', [Traffic::class, 'index'])->name('dashboard');
+Route::get('grafik', [Traffic::class, 'grafik'])->name('grafik');
