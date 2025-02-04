@@ -28,15 +28,20 @@ class Monitor extends Controller
             ->collection('VoucherUsages')
             ->raw(function ($collection) use ($ProductCode, $startDateUTC, $endDateUTC, $status) {
                 return $collection->aggregate([
-                    ['$match' => ['ProductCode' => $ProductCode,
-                    'Claimed' => $status === 'true' ? true : false,
+                    ['$match' => [ 
+                        'ProductCode' => $ProductCode === 'semua' ? ['$ne' => null] : $ProductCode,
+                   'Claimed' => $status === 'semua' ? ['$ne' => [true,false]] : ($status === 'true' ? true : false),
                     'UsedAt' => [
                         '$gte' => $startDateUTC,  // Filter mulai tanggal
                         '$lte' => $endDateUTC     // Filter sampai tanggal
                     ]
                     ]], // Filter berdasarkan ProductCode
                     ['$group' => [
-                        '_id' => '$ProductCode',
+                        // '_id' => '$ProductCode',
+                        '_id' => [
+                            'Claimed' => '$Claimed',
+                            'ProductCode' => '$ProductCode'
+                        ],
                         'total_count' => ['$sum' => 1], // Hitung jumlah data
                         'total_cashback' => ['$sum' => '$Cashback'], // Hitung total Cashback
                         'details' => ['$push' => [
@@ -55,32 +60,35 @@ class Monitor extends Controller
         } else {
             // Jika nama kosong, ambil semua data
             $test = DB::connection('mongodb')
-        ->collection('VoucherUsages')
-        ->raw(function ($collection) use ($ProductCode) {
-            return $collection->aggregate([
-                // ['$match' => ['Claimed' => true
-                // ]], // Filter berdasarkan ProductCode
-                ['$group' => [
-                    '_id' => '$ProductCode',
-                    'total_count' => ['$sum' => 1], // Hitung jumlah data
-                    'total_cashback' => ['$sum' => '$Cashback'], // Hitung total Cashback
-                    'details' => ['$push' => [
-                        'Cashback' => '$Cashback',
-                        'ResellerCode' => '$ResellerCode'
-                    ]]
-                ]],
-                [
-                    '$sort' => [
-                        'total_count' => -1 // Urutkan berdasarkan total_cashback secara menurun
+            ->collection('VoucherUsages')
+            ->raw(function ($collection) use ($ProductCode) {
+                return $collection->aggregate([
+                    // Optional: Filter by the ProductCode if needed
+                    // ['$match' => ['Claimed' => true, 'ProductCode' => $ProductCode]], 
+        
+                    ['$group' => [
+                        '_id' => [
+                            'Claimed' => '$Claimed',
+                            'ProductCode' => '$ProductCode'
+                        ],
+                        'total_count' => ['$sum' => 1], // Count the total occurrences
+                        'total_cashback' => ['$sum' => '$Cashback'], // Sum the cashback values
+                        'details' => ['$push' => [
+                            'Cashback' => '$Cashback',
+                            'ResellerCode' => '$ResellerCode'
+                        ]] // Push Cashback and ResellerCode into an array
+                    ]],
+                    [
+                        '$sort' => [
+                            'total_count' => -1 // Sort by total_count in descending order
+                        ]
                     ]
-                ]
-
-            ]);
-        });
+                ]);
+            });
+        
         }
 
       
-       
        
     
     $test = iterator_to_array($test); // Konversi Cursor MongoDB ke Array
@@ -103,17 +111,25 @@ class Monitor extends Controller
             // Jika nama diisi, lakukan pencarian berdasarkan nama
             $test = DB::connection('mongodb')
             ->collection('VoucherUsages')
-            ->where('ProductCode',$id)
-            ->where('Claimed',true)  
+            ->where('ProductCode',$id)  
             ->get();
         } else {
             $test = DB::connection('mongodb')
             ->collection('VoucherUsages')
-            ->where('ProductCode',$id)
-            ->where('UsedAt','>=',$startutc)
-            ->where('UsedAt','<=',$endutc)  
-            ->where('Claimed',$status === 'true' ? true : false)  
+            ->where('ProductCode', $id)
+            ->where('UsedAt', '>=', $startutc)
+            ->where('UsedAt', '<=', $endutc)
+            ->where(function($query) use ($status) {
+                if ($status === 'semua') {
+                    $query->where('Claimed', '!=', null); // Look for non-null values of Claimed
+                } elseif ($status === 'true') {
+                    $query->where('Claimed', true); // Look for Claimed true
+                } elseif ($status === 'false') {
+                    $query->where('Claimed', false); // Look for Claimed false
+                }
+            })
             ->get();
+        
         }
 
     //     $id = $request->query('id');  // Mendapatkan parameter 'id'

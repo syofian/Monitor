@@ -55,15 +55,17 @@
         <div class="d-flex justify-content-start">
                 <form action="{{ route('monitor') }}" method="GET" class="d-flex gap-3 align-items-center" style="width: 600px;">
                     <!-- Input Product Code (Lebar disesuaikan) -->
-                    <input type="text" name="ProductCode" id="ProductCode" value="{{ request('ProductCode') }}" class="form-control" style="width: 200px;" required>
+                    <input type="text" name="ProductCode" id="ProductCode" value="{{ request('ProductCode') ?? 'semua' }}" class="form-control" style="width: 200px;" required >
                     
                     <!-- Input Tanggal -->
                     <input type="date" name="date1" value="{{ request('date1') }}" class="form-control" required>
                     <input type="date" name="date2" value="{{ request('date2') }}" class="form-control" required>
                     
                     <select name="status" class="form-control" id="status" style="width: 100px;" required>
-  <option value="true">Berhasil</option>
-  <option value="false">Gagal</option>
+                    <option value="">-----</option>
+                    <option value="true">Berhasil</option>
+                    <option value="false">Gagal</option>
+                    <option value="semua">Semua</option>
 </select>
 
                     <!-- Tombol Submit -->
@@ -78,7 +80,8 @@
                             <th>No</th>  
                             <th>Product Code</th>       
                             <th>Jumlah Transaksi</th>         
-                            <th>Cashback</th>    
+                            <th>Cashback</th> 
+                             <th>Status</th>    
                             <th>Aksi</th> 
                         </tr>
                     </thead>
@@ -86,11 +89,12 @@
                         @foreach($data as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item['_id'] }}</td>
+                                <td>{{ $item['_id']['ProductCode'] }}</td>
                                 <td>{{ $item['total_count'] }}</td>
                                 <td>{{ $item['total_cashback'] }}</td>
+                                <td>{{ $item['_id']['Claimed'] === true ? 'berhasil' : 'gagal' }}</td>
                                 <td> <a href="{{ route('voucher_detail', [
-    'id' => $item['_id'], 
+    'id' => $item['_id']['ProductCode'], 
     'tgl1' => request()->has('date1') ? request()->input('date1') : 'null', 
     'tgl2' => request()->has('date2') ? request()->input('date2') : 'null',
     'status' => request()->has('status') ? request()->input('status') : 'null'
