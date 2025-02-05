@@ -28,57 +28,32 @@ class Traffic extends Controller
       
         $totalPengguna = DB::connection('sqlsrv')->table('reseller')->distinct()->count('kode');
         $now = now(); // Mendapatkan tanggal dan waktu saat ini
-        $oneMonthAhead = $now->copy()->addMonth(); // Tambahkan satu bulan ke tanggal saat ini
-        $lastYear = $oneMonthAhead->copy()->subMonths(12); // Kurangi satu tahun dari tanggal satu bulan ke depan
+        // $oneMonthAhead = $now->copy()->addMonth(); // Tambahkan satu bulan ke tanggal saat ini
+        // $lastYear = $oneMonthAhead->copy()->subMonths(12); // Kurangi satu tahun dari tanggal satu bulan ke depan
 
 
-        $totalDivisi = DB::connection('sqlsrv')->table('reseller')
-        ->select(DB::raw("FORMAT(tgl_aktivitas, 'yyyy-MM-dd') as formatted_date"), DB::raw('COUNT(kode) as kode'))
-        ->where('tgl_aktivitas', '>', $lastYear->startOfMonth())
+        $total = DB::connection('sqlsrv')->table('reseller')
+        ->select(DB::raw("FORMAT(tgl_aktivitas, 'yyyy-MM-dd') as tgl"), DB::raw('COUNT(kode) as jml'))
+        ->where('tgl_aktivitas', '<', now())  // `now()` akan mengambil waktu saat ini
         ->groupBy(DB::raw("FORMAT(tgl_aktivitas, 'yyyy-MM-dd')"))
-        ->orderBy('formatted_date', 'asc')
-        ->limit(30)
-        ->pluck('kode');
-    
+        ->orderBy('tgl', 'desc')
+        ->limit(15)
+        ->get()->toArray(); // Mengonversi hasil ke array
 
-        $divisi = DB::connection('sqlsrv')->table('reseller')
+        $pengguna = DB::connection('sqlsrv')->table('reseller')
         ->select(DB::raw("FORMAT(tgl_aktivitas, 'yyyy-MM-dd') as formatted_date"))
-        ->where('tgl_aktivitas', '>', $lastYear->startOfMonth())
+        ->where('tgl_aktivitas', '<', $now)
         ->groupBy(DB::raw("FORMAT(tgl_aktivitas, 'yyyy-MM-dd')"))
-        ->orderBy('formatted_date', 'asc')
-        ->limit(30)
+        ->orderBy('formatted_date', 'desc')
+        ->limit(15)
         ->pluck('formatted_date');
 
-        DD($divisi);
-    
         return view('Traffic/index', [
-            'totalPengguna' => $totalPengguna,
-            'totalDivisi' => $totalDivisi,
-            'divisi' => $divisi,
+            'total' => $total,
+            'pengguna' => $pengguna,
         ]);
     }
 
-    
-//     public function grafik()
-//     {
-//        $totalBookingHotel = DB::connection('pgsql')->table('sppd')
-//     ->select(DB::raw('COUNT(io_number) as io_count'))
-//     ->groupBy(DB::raw('MONTH(start_date)'))
-//     ->pluck('io_count');
-
-// $bulan =DB::connection('pgsql')->table('sppd')
-//     ->select(DB::raw('MONTHNAME(start_date) as bulan'))
-//     ->groupBy(DB::raw('MONTHNAME(start_date)'))
-//     ->pluck('bulan');
-
-// $tes = DB::connection('pgsql')->table('sppd')->get();
-
-// // Perbaikan pada bagian ini
-// $hasil = response()->json($tes);
-// dd($hasil); // Melakukan debug untuk variabel $hasil
-
-
-//         return view('dashboard.index', compact('totalBookingHotel', 'bulan','hasil'));
-//     }
+ 
 }
 

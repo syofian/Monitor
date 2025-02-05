@@ -1,73 +1,91 @@
 @include('template/head')
+
 <div class="container">
-    <div class="card card-primary">
-      <div class="card-header">
-        <h3 class="card-title">Chart Example</h3>
-        <div class="card-tools">
-          <button type="button" class="btn btn-tool" data-card-widget="collapse">
-            <i class="fas fa-minus"></i>
-          </button>
-          <button type="button" class="btn btn-tool" data-card-widget="remove">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md">
-            <div class="chart">
-              <div id="container" style="min-height: 300px; height: 300px; max-height: 300px;"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+<div class="card card-primary">
+<div class="card-header">
+        <span>Traffic Pengguna</span>
     </div>
-  </div>
+<div class="card-body">
+    <!-- Elemen untuk memilih rentang tanggal -->
+   <div class="d-flex">
+    <input type="date" id="startDate" class="form-control" name="startDate">
+    <input type="date" id="endDate" class="form-control" name="endDate">
+    <button class="btn btn-primary h-7 form-control" onclick="filterData()">Terapkan</button>
+</div>
+    <!-- Elemen untuk menampilkan diagram batang -->
+    <div id="container" style="width: 100%; height: 400px;"></div>
+</div>
+</div>
+    
+    <script src="https://code.highcharts.com/10/highcharts.js"></script>
+    <script>
+   
+   var coba = <?php echo json_encode($total); ?>;
 
-<script src="https://code.highcharts.com/highcharts.js"></script>
+// Mengambil semua nilai 'jml' dan 'tgl' menggunakan map()
 
-<script>
-// Data yang akan ditampilkan pada grafik
-var data = [
-    <?php
-    // Loop melalui setiap nilai dalam $totalBookingHotel dan $bulan
-    for ($i = 0; $i < count($totalDivisi); $i++) {
-        echo '{';
-        echo 'name: "' . $divisi[$i] . '",'; // Menggunakan nilai dari $bulan
-        echo 'y: ' . $totalDivisi[$i]; // Menggunakan nilai dari $totalBookingHotel
 
-        // Mengatur properti sliced dan selected untuk item pertama
-        if ($i === 0) {
-            echo ', sliced: true, selected: true';
+
+
+               // console.log(coba); // Check the value of tes
+        console.log(coba); // Check the value of teh
+
+        // Data pengguna per hari, contoh data inisiasi terpisah (bisa diambil dari API atau database)
+        // var dataPengguna = [
+        //     { date: '2025-02-01', users: 120 },
+        //     { date: '2025-02-02', users: 150 },
+        //     { date: '2025-02-03', users: 90 },
+        //     { date: '2025-02-04', users: 130 },
+        //     { date: '2025-02-05', users: 160 },
+        //     // Tambahkan data lainnya
+        // ];
+        // console.log(dataPengguna); // Check the value of teh
+
+
+        // Fungsi untuk memfilter data berdasarkan rentang tanggal
+        function filterData() {
+            var startDate = document.getElementById("startDate").value;
+            var endDate = document.getElementById("endDate").value;
+
+            // Filter data sesuai rentang tanggal yang dipilih
+            var filteredData = coba.filter(function(item) {
+                return item.tgl >= startDate && item.tgl <= endDate;
+            });
+
+            // Render grafik dengan data yang telah difilter
+            renderChart(filteredData);
         }
 
-        echo '},';
-    }
-    ?>
-];
-
-// Membuat grafik bar chart
-Highcharts.chart('container', {
-    chart: {
-        type: 'column' // Menggunakan tipe 'column' untuk membuat bar chart
-    },
-    title: {
-        text: 'Grafik Transaksi ' // Judul grafik
-    },
-    xAxis: {
-        categories: <?php echo json_encode($divisi); ?> // Menggunakan nama bulan sebagai kategori pada sumbu x
-    },
-    yAxis: {
-        title: {
-            text: 'Jumlah' // Label pada sumbu y
+        // Fungsi untuk merender chart
+        function renderChart(data) {
+            Highcharts.chart('container', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Jumlah Pengguna per Hari'
+                },
+                xAxis: {
+                    categories: data.map(function(item) { return item.jml; }),
+                    title: {
+                        text: 'Tanggal'
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Jumlah Pengguna'
+                    }
+                },
+                series: [{
+                    name: 'Pengguna',
+                    data: data.map(function(item) { return item.tgl; })
+                }]
+            });
         }
-    },
-    series: [{
-        name: 'Hotel',
-        data: <?php echo json_encode($totalDivisi); ?> // Menggunakan data total booking untuk series
-    }]
-});
-</script>
 
+        // Inisialisasi chart pertama kali dengan semua data
+        renderChart(coba);
+    </script>
 
 @include('template/foot')

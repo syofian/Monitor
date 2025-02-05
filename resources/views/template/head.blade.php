@@ -199,6 +199,21 @@
    </li>
    @endif
   
+   @if(request()->path() == 'traffic')
+   <li class="nav-item">    
+   <a href="{{ route('traffic') }}" class="nav-link active" style="background: #187ca4;">
+   <i class="nav-icon fas fa-traffic-light"></i>
+              <p>Traffic Pengguna</p>
+       </a>
+   </li>
+   @else
+   <li class="nav-item">
+       <a href="{{ route('traffic') }}" class="nav-link">
+       <i class="nav-icon fas fa-traffic-light"></i>     
+            <p>Traffic Pengguna</p>
+       </a>
+   </li>
+   @endif
 
 
           

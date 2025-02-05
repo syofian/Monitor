@@ -74,6 +74,7 @@
                         <th>Nama</th>
                         <th>Kota</th>
                         <th>Kode Level</th>
+                        <th>Nomor HP</th>
                         <th>Pin</th>
                         <th>Edit</th>
                     </tr>
@@ -86,7 +87,10 @@
                             <td>{{ $item['Nama'] }}</td>
                             <td>{{ $item['Kota'] }}</td>
                             <td>{{ $item['KodeLevel'] }}</td>
-                            <td>{{ $item['Pin'] }}</td>
+                            <td>{{ $item['NoHPPrimary'] }}</td>
+                            <td id="pin-cell-{{ $loop->iteration }}" onclick="togglePin({{ $loop->iteration }}, '{{ $item['Pin'] }}')">*****</td>
+
+                          
                           
                            
 <td>
@@ -151,20 +155,15 @@ $(document).ready(function() {
 
 </script>
 <script>
-    // When the modal opens, populate the fields with the current values and set the correct form action
-    var myModal = document.getElementById('editModal');
-    myModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget; // Button that triggered the modal
-        var id = button.getAttribute('data-id'); // Extract data-id attribute (the ID of the record)
-        var pin = button.getAttribute('data-pin');
-        // Set the form action to the correct route, including the ID
-        var form = document.getElementById('editForm');
-        form.action = '/editResellerMongo' + id; // The correct route to update the record
-
-        // Populate the input field with the current template value
-        var pinInput = document.getElementById('pin');
-        pinInput.value = pin; // Set the input field to the current template
-    });
+    function togglePin(iteration, pinValue) {
+        const pinCell = document.getElementById('pin-cell-' + iteration);
+        if (pinCell.textContent === pinValue) {
+            pinCell.textContent = '****'; // Symbol to mask the PIN
+        } else {
+            pinCell.textContent = pinValue; // Revert back to original PIN value
+        }
+    }
 </script>
+
 
 @include('template/foot')

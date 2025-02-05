@@ -67,5 +67,4 @@ Route::put('/editResellerMongo{id}', [CrudResellerMongo::class, 'edit'])->name('
 
 
 //Traffic
-Route::get('/traffic', [Traffic::class, 'index'])->name('dashboard');
-Route::get('grafik', [Traffic::class, 'grafik'])->name('grafik');
+Route::get('/traffic', [Traffic::class, 'index'])->name('traffic');
