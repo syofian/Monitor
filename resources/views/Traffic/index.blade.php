@@ -53,7 +53,7 @@ console.log(values);     // Sorted quantities
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'Jumlah',
+                    text: 'Jumlah Transaksi',
                     align: 'high'
                 },
                 labels: {
@@ -61,7 +61,7 @@ console.log(values);     // Sorted quantities
                 }
             },
             tooltip: {
-                valueSuffix: ' Pengguna'
+                valueSuffix: ' Transaksi'
             },
             series: [{
                 name: 'Report Traffic',
