@@ -88,7 +88,7 @@
                             <td>{{ $item['Kota'] }}</td>
                             <td>{{ $item['KodeLevel'] }}</td>
                             <td>{{ $item['NoHPPrimary'] }}</td>
-                            <td id="pin-cell-{{ $loop->iteration }}" onclick="togglePin({{ $loop->iteration }}, '{{ $item['Pin'] }}')">*****</td>
+                            <td id="pin-cell" onclick="togglePin(this, '{{ $item['Pin'] }}')">*****</td>
 
                           
                           
@@ -155,14 +155,17 @@ $(document).ready(function() {
 
 </script>
 <script>
-    function togglePin(iteration, pinValue) {
-        const pinCell = document.getElementById('pin-cell-' + iteration);
-        if (pinCell.textContent === pinValue) {
-            pinCell.textContent = '****'; // Symbol to mask the PIN
-        } else {
-            pinCell.textContent = pinValue; // Revert back to original PIN value
-        }
+   function togglePin(tdElement, pinValue) {
+    // Check if the cell already displays the Pin value
+    if (tdElement.textContent === pinValue) {
+        // If it does, hide the Pin value by changing the text back to asterisks
+        tdElement.textContent = "*****";
+    } else {
+        // If it doesn't, show the Pin value
+        tdElement.textContent = pinValue;
     }
+}
+
 </script>
 
 
