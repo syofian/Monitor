@@ -9,8 +9,8 @@ class Format extends Controller
     public function index(Request $request)
     {
 
-            $data  = DB::connection('mysql')
-            ->table('format')
+            $data  = DB::connection('mongodb')
+            ->collection('Formats')
             ->get();
             return view('Format/index', compact('data'));
 }
@@ -19,12 +19,12 @@ public function editFormat(Request $request, $id)
 {
     // $id =  $request->input('id');
     $format =  $request->input('format');
-    $data = DB::connection('mysql')
-        ->table('format')
+    $data = DB::connection('mongodb')
+        ->collection('Formats')
         ->where('_id', $id)
         ->update([
             '_id' => $id,
-            'format' => $format,
+            'Format' => $format,
             // Add more fields as necessary
         ]);
 
@@ -35,8 +35,8 @@ public function editFormat(Request $request, $id)
 public function deleteFormat(Request $request, $id)
 {
     
-    DB::connection('mysql')
-        ->table('format')
+    DB::connection('mongodb')
+        ->collection('Formats')
         ->where('_id', $id)
         ->delete();
 
@@ -46,11 +46,11 @@ public function deleteFormat(Request $request, $id)
 public function addFormat(Request $request)
 {
     
-   $data = DB::connection('mysql')
-    ->table('format')
+   $data = DB::connection('mongodb')
+    ->collection('Formats')
     ->insert([
         '_id' => $request->input('id'),  // Assuming 'template' is being passed
-        'format' => $request->input('format'),  // Status set to 1 (active)
+        'Format' => $request->input('format'),  // Status set to 1 (active)
        
     ]);
 

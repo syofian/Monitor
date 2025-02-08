@@ -75,16 +75,16 @@
                     @foreach($data as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->_id }}</td>
-                            <td>{{ $item->Format }}</td>
+                            <td>{{ $item['_id'] }}</td>
+                            <td>{{ $item['Format'] }}</td>
                             <td>
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
-                                                data-id="{{ $item->_id }}" data-format="{{ $item->Format }}">
+                                                data-id="{{ $item['_id'] }}" data-format="{{ $item['Format'] }}">
                                         <i class="fa fa-edit"></i>
                                         </button>
                             </td>
                             <td>
-                            <form action="deleteFormat{{$item->_id}}" method="POST">
+                            <form action="{{ route('deleteFormat', ['id' => $item['_id']]) }}" method="POST">
                             @csrf
     @method('DELETE')
     <button type="submit" class="btn btn-danger">
@@ -144,9 +144,9 @@
                     @csrf
                     <div class="mb-3">
                         <label for="_id" class="form-label">ID</label>
-                        <input type="text" class="form-control" id="_id" name="id" required>
+                        <input type="text" class="form-control" name="id" required>
                         <label for="format">Format</label>
-                        <input type="text" class="form-control" id="format" name="format" required>
+                        <input type="text" class="form-control"  name="format" required>
                     </div>
                     
                     <button type="submit" class="btn btn-success">Simpan</button>
