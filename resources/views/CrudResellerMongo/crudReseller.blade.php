@@ -88,17 +88,13 @@
                             <td>{{ $item['Kota'] }}</td>
                             <td>{{ $item['KodeLevel'] }}</td>
                             <td>{{ $item['NoHPPrimary'] }}</td>
-                            <td id="pin-cell" onclick="togglePin(this, '{{ $item['Pin'] }}')">*****</td>
-
-                          
-                          
-                           
-<td>
-<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
-                    data-id="{{ $item['Kode'] }}" data-pin="{{ $item['Pin'] }}" >
-                <i class="fa fa-edit"></i>
-            </button>
-</td>
+                            <td id="pin-cell" onclick="togglePin(this, '{{ $item['Pin'] }}')">*****</td>                   
+                            <td>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
+                                                data-id="{{ $item['Kode'] }}" data-pin="{{ $item['Pin'] }}" >
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                            </td>
 
 
                                         </tr>

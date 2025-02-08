@@ -6,6 +6,7 @@ use App\Http\Controllers\broad; // Pastikan class controller di-import dengan be
 use App\Http\Controllers\Reseller; // Pastikan class controller di-import dengan benar
 use App\Http\Controllers\CrudResellerMongo; // Pastikan class controller di-import dengan benar
 use App\Http\Controllers\Traffic; // Pastikan class controller di-import dengan benar
+use App\Http\Controllers\Format; // Pastikan class controller di-import dengan benar
 
 
 /*
@@ -68,3 +69,10 @@ Route::put('/editResellerMongo{id}', [CrudResellerMongo::class, 'edit'])->name('
 
 //Traffic
 Route::get('/traffic', [Traffic::class, 'index'])->name('traffic');
+
+
+// Format
+Route::get('/Format', [Format::class, 'index'])->name('Format');
+Route::post('/addFormat', [Format::class, 'addFormat'])->name('addFormat');
+Route::put('/editFormat{id}', [Format::class, 'editFormat'])->name('editFormat');
+Route::delete('/deleteFormat{id}', [Format::class, 'deleteFormat'])->name('deleteFormat');

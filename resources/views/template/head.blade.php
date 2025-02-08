@@ -215,6 +215,22 @@
    </li>
    @endif
 
+   @if(request()->path() == 'Format')
+   <li class="nav-item">    
+   <a href="{{ route('traffic') }}" class="nav-link active" style="background: #187ca4;">
+   <i class="nav-icon fas fa-file"></i>
+              <p>Format</p>
+       </a>
+   </li>
+   @else
+   <li class="nav-item">
+       <a href="{{ route('Format') }}" class="nav-link">
+       <i class="nav-icon fas fa-file"></i>     
+            <p>Format</p>
+       </a>
+   </li>
+   @endif
+
 
           
         </ul>

@@ -50,26 +50,14 @@
 
 <div class="card card-primary">
     <div class="card-header">
-        <span>Broad</span>
+        <span>Format</span>
     </div>
     <br>
-
     <div class="d-flex justify-content-left ml-3" style="gap: 10px;">
-    <button class="btn btn-link" onclick="window.location.href='/broad'">Database</button>
-    <button class="btn btn-link" onclick="window.location.href='/showfile'">CSV</button>
-    <button class="btn btn-success" onclick="window.location.href='/Pesan'">Template Pesan</button>
-</div>
-
-<br>
-
-
-    <div class="d-flex d-flex justify-content-between m-3 ml-3">
     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
-   <i class="fa fa-plus"></i>
+    <i class="fa fa-plus"></i>
 </button>
-  
 </div>
-
     <div class="card-body">
         <div id="Mandarin" class="tabcontent">
             <!-- Table and Buttons -->
@@ -77,8 +65,8 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Pesan</th>
-                        <th>Status</th>
+                        <th>ID</th>
+                        <th>Format</th>
                         <th>Edit</th>
                         <th>Hapus</th>
                     </tr>
@@ -87,39 +75,26 @@
                     @foreach($data as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->template }}</td>
+                            <td>{{ $item->_id }}</td>
+                            <td>{{ $item->Format }}</td>
                             <td>
-    @if($item->status == 1)
-        <!-- Button to deactivate (Nonaktif) -->
-        <form action="{{ route('aktivasiPesan', ['id' => $item->id]) }}" method="POST">
-            @csrf
-            @method('PUT')
-            <!-- Input for setting status to 2 (Nonaktif) -->
-            <button type="submit" class="btn btn-success">Aktif</button>
-        </form>
-    @else
-        <!-- Button to activate (Aktif) -->
-        <form action="{{ route('aktivasiPesan', ['id' => $item->id]) }}" method="POST">
-            @csrf
-            @method('PUT')
-            <!-- Input for setting status to 1 (Aktif) -->
-            <button type="submit" class="btn btn-warning">NonAktif</button>
-        </form>
-    @endif
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
+                                                data-id="{{ $item->_id }}" data-format="{{ $item->Format }}">
+                                        <i class="fa fa-edit"></i>
+                                        </button>
+                            </td>
+                            <td>
+                            <form action="deleteFormat{{$item->_id}}" method="POST">
+                            @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-danger">
+        <i class="fa fa-trash"></i>
+    </button>
+</form>
+
+
 </td>
-<td>
-<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
-                    data-id="{{ $item->id }}" data-template="{{ $item->template }}">
-               <i class="fa fa-edit"></i>
-            </button>
-</td>
-<td>
-<form action="{{ route('deletePesan', ['id' => $item->id]) }}" method="POST">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>
-        </form>
-</td>
+
 
                                         </tr>
                     @endforeach
@@ -135,7 +110,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Template</h5>
+                <h5 class="modal-title" id="editModalLabel">Edit Format</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-times"></i></span></button>
             </div>
             <div class="modal-body">
@@ -143,8 +118,11 @@
                     @csrf
                     @method('PUT')
                     <div class="mb-3">
-                        <label for="template" class="form-label">Template</label>
-                        <input type="text" class="form-control" id="template" name="template" required>
+                        <label for="template" class="form-label">ID</label>
+                        <input type="text" class="form-control" id="_id" name="id" readonly>
+                        <label for="template" class="form-label">Format</label>
+                        <input type="text" class="form-control" id="format" name="format" required>
+                    
                     </div>
                     <button type="submit" class="btn btn-success">Simpan</button>
                 </form>
@@ -158,19 +136,42 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createModalLabel">New Template</h5>
+                <h5 class="modal-title" id="createModalLabel">Insert Format</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-times"></i></span></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ route('addPesan') }}" id="createForm">
+                <form method="POST" action="{{ route('addFormat') }}" id="createForm">
                     @csrf
                     <div class="mb-3">
-                        <label for="template" class="form-label">Template</label>
-                        <input type="text" class="form-control" id="template" name="template" required>
+                        <label for="_id" class="form-label">ID</label>
+                        <input type="text" class="form-control" id="_id" name="id" required>
+                        <label for="format">Format</label>
+                        <input type="text" class="form-control" id="format" name="format" required>
                     </div>
                     
                     <button type="submit" class="btn btn-success">Simpan</button>
                 </form>
+                <div>
+                    <br>
+                <table>
+    <tr>
+        <td style="vertical-align: top; font-size:14px">
+            <strong>Form ID:</strong> <br>Isi Buy:kode produk jika produknya prabayar <br> jika produknya pascabayar <br> Isi Paybill: <br> kode produk dan untuk cek tagihan ppob di isi Viewbill:kode produk
+        </td>
+        <td style="vertical-align: top; font-size:14px">
+            <strong>Form Format:</strong>  <br>
+            {ProductCode} = KodeProduk <br>
+            {Sequence} = counter di otomax (urutan transaksi) <br>
+            {AccountNo} = nomor tujuan <br>
+           {Amount} = nominal transfer (biasanya digunakan untuk produk transfer uang atau emoney)
+           <br>
+           {Pin} = pin transaksi
+            
+        </td>
+    </tr>
+</table>
+
+                </div>
             </div>
         </div>
     </div>
@@ -202,15 +203,18 @@ $(document).ready(function() {
     myModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget; // Button that triggered the modal
         var id = button.getAttribute('data-id'); // Extract data-id attribute (the ID of the record)
-        var template = button.getAttribute('data-template'); // Extract data-template attribute (current template value)
-        
+        var format = button.getAttribute('data-format'); // Extract data-template attribute (current template value)
         // Set the form action to the correct route, including the ID
         var form = document.getElementById('editForm');
-        form.action = '/editPesan' + id; // The correct route to update the record
+        form.action = '/editFormat' + id; // The correct route to update the record
 
         // Populate the input field with the current template value
-        var templateInput = document.getElementById('template');
-        templateInput.value = template; // Set the input field to the current template
+        var idInput = document.getElementById('_id');
+        var formatInput = document.getElementById('format');
+
+        idInput.value = id; // Set the input field to the current template
+        formatInput.value = format; // Set the input field to the current template
+
     });
 </script>
 
